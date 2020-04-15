@@ -1,0 +1,81 @@
+﻿@using WK.Tea.Web.Models;
+
+@model JSPayModel
+
+<div style="display:flex; flex-direction:column; height:100%;">
+    <div class="layui-card">
+        <div class="layui-card-body nopadding">
+            <div class="layui-form detail-form">
+                <div class="layui-form-item layui-item-separatorline">
+                    <label class="layui-form-label text-left">订单编号</label>
+                    <div class="layui-input-block text-right">
+                        @Model.product_id
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label text-left">订单金额</label>
+                    <div class="layui-input-block text-right">
+                        ￥@Model.price
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-card" style="flex:1;">
+        <div class="layui-card-body nopadding">
+            <ul class="line-item-list">
+                <li id="chooseWXPay" class="line-item layui-item-separatorline icon-arrow-right">
+                    <i class="layui-icon layui-icon-login-wechat"></i>
+                    微信支付
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript">
+    //window.onload = function () {
+    //    callpay();
+    //}
+    document.querySelector('#chooseWXPay').onclick = function () {
+        callpay();
+    }
+    function callpay() {
+        if (typeof WeixinJSBridge == "undefined") {
+            if (document.addEventListener) {
+                document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+            }
+            else if (document.attachEvent) {
+                document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+                document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+            }
+        }
+        else {
+            jsApiCall();
+        }
+    }
+
+    function jsApiCall() {
+        if (parseInt(@Model.userVersion) < 5) {
+            alert("抱歉，您的微信版本不支持微信支付。"); isPayed = false;
+            return;
+        }
+        WeixinJSBridge.invoke('getBrandWCPayRequest', {
+            "appId": "@Model.appId",
+            "timeStamp": "@Model.timestamp",
+            "nonceStr": "@Model.nonceStr",
+            "package": "prepay_id=@Model.prepay_id",
+            "signType": "MD5",
+            "paySign": "@Model.sign",
+        }, function (res) {
+            if (res.err_msg == "get_brand_wcpay_request:ok") { // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+                window.location.href = decodeURIComponent('@Model.success_redict_url').replace("amp;", "");
+            }
+            else {
+                alert("支付失败");
+            }
+        });
+    }
+
+</script>

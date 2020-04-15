@@ -1,0 +1,194 @@
+﻿<title>倒茶</title>
+
+
+<div class="layui-fluid ">
+    <!-- <div carousel-item>
+                 <div><img width="100%" src="~/assets/images/bg.jpg"></div>
+             </div> -->
+    <!-- <div class='line_box'></div> -->
+    <!-- <div class="layui-fluid layui-bg"> -->
+
+    <div class="layui-carousel" id="test11">
+        <div carousel-item>
+            <div><img width="100%" src="~/assets/images/bg.jpg"></div>
+            <!-- <div><img width="100%" src="~/assets/images/bg.jpg"></div>
+            <div><img width="100%" src="~/assets/images/bg.jpg"></div>
+            <div><img width="100%" src="~/assets/images/bg.jpg"></div>
+            <div><img width="100%" src="~/assets/images/bg.jpg"></div> -->
+        </div>
+        <div class='line_box'></div>
+    </div>
+
+    <div class="home-search-pannel">
+
+        <div class="layui-card boxs">
+            <div class="layui-card-body">
+                <div class="layui-form">
+                    <div class="layui-form-item layui-item-separatorline" id="choiceStartTime">
+                        <label class="layui-form-label">预定时间</label>
+                        <div class="layui-input-block">
+                            <input type="text" class="layui-input inx_input" readonly="readonly" value="" />
+                        </div>
+                    </div>
+                    <div class="layui-form-item" id="choiceTimeLong">
+                        <label class="layui-form-label">预定时长</label>
+                        <div class="layui-input-block">
+                            <input type="text" class="layui-input inx_input" readonly="readonly" value="2小时" />
+                        </div>
+                    </div>
+                    <div class="layui-form-item text-center">
+                        <a class="layui-btn btn_sty" lay-href="/shop">搜索可预订</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class='inx_tit'>
+            <div class='inx_tit1'>一盏香茗半日闲</div>
+            <div class='inx_tit2'>特惠茶舍预定低至七折</div>
+        </div>
+        <div class="shop_list_box">
+            <div class="shop_btns_box row">
+            </div>
+        </div>
+
+        <div class="shop_list_content row jb ">
+            <!-- <div class="shop_item_box">
+              <img width="100%" src="~/assets/images/bg.jpg">
+              <div class='shop_intro'>倒茶-望京麒麟社1号店 望京麒麟社2号楼1006…</div>
+              <div class='shop_price_inx'><span>¥268起</span><span class='shop_price_spa'>¥298</span></div>
+            </div>
+            <div class="shop_item_box">
+              <img width="100%" src="~/assets/images/bg.jpg">
+              <div class='shop_intro'>倒茶-望京麒麟社1号店 望京麒麟社2号楼1006…</div>
+              <div class='shop_price_inx'><span>¥268起</span><span class='shop_price_spa'>¥298</span></div>
+            </div> -->
+        </div>
+        <div class='tip'><span>努力建设中~</span></div>
+
+
+
+
+    </div>
+
+</div>
+
+<script type="text/javascript" src="~/assets/layer_mobile/layer.js"></script>
+<script>
+    layui.use(['admin', 'mtimer', 'carousel'], function () {
+        console.log($)
+        var $ = layui.jquery, mtimer = layui.mtimer, carousel = layui.carousel, admin = layui.admin;
+
+        var nowDate = new Date(),
+            nM = nowDate.getMonth() + 1,
+            nD = nowDate.getDate(),
+            nH = nowDate.getHours(),
+            nMin = nowDate.getMinutes();
+
+        if (nMin >= 30) {
+            nH++;
+            nMin = "00";
+        } else {
+            nMin = "30";
+        }
+        if (nH < 10) {
+            nH = "0" + nH;
+        }
+        $('#choiceStartTime  input[type=text]').val(nM + "月" + nD + "日 " + nH + ":" + nMin);
+
+
+
+        mtimer.render({
+            elem: '#choiceStartTime'
+        });
+
+        mtimer.render({
+            type: 2,
+            elem: '#choiceTimeLong'
+        });
+
+        //图片轮播
+        var ins = carousel.render({
+            elem: '#test11'
+            , width: '100%'
+            , height: '281px'
+            , interval: 5000
+        });
+
+        var placeArr = ['北京', '天津', '上海', '成都', '重庆']
+        var str = ''
+        placeArr.forEach((item, inx) => {
+            if (inx == 0) {
+                str += '<div class="shop_btns_item shop_btns_active">' + item + '</div>'
+            } else {
+                str += '<div class="shop_btns_item">' + item + '</div>'
+            }
+        });
+        $('.shop_btns_box').html(str)
+        $('.shop_btns_box >div').on("click", function () {
+            $(this).addClass('shop_btns_active').siblings().removeClass('shop_btns_active')
+            if ($(this).index() == 0) {
+                $('.shop_list_content').show()
+                $('.tip').hide()
+            } else {
+                $('.shop_list_content').hide()
+                $('.tip').show()
+            }
+        })
+
+
+
+
+
+        admin.req({
+            url: '/api/shop/pagelist'
+            , type: 'get'
+            , data: {
+                limit: 10,
+                page: 1
+            }
+            //, contentType: "application/json"
+            , done: function (res) { //这里要说明一下：done 是只有 response 的 code 正常才会执行。而 succese 则是只要 http 为 200 就会执行
+                var str = ''
+                layui.each(res.data, function (index, item) {
+                    var inx = Number(index) + 1
+                    console.log(item.Flag)
+                    if (item.Flag == 1) {
+                        str +=
+                            '<div class="shop_item_box">' +
+                            '<img width="100%" src="/assets/images/shop/' + inx + '/1.jpg">' +
+                            '<div class="shop_intro t_hide2">已停业</div>' +
+                            '<div class="shop_price_inx"><span>¥268起</span><span class="shop_price_spa">¥298</span></div>' +
+                            '</div>'
+
+                    } else if (item.Flag == 2) {
+                        str +=
+                            '<div class="shop_item_box">' +
+                            '<img width="100%" src="/assets/images/BJ0000.jpg">' +
+                            '<div class="shop_intro t_hide2">正在建设中</div>' +
+                            '<div class="shop_price_inx"><span>¥268起</span><span class="shop_price_spa">¥298</span></div>' +
+                            '</div>'
+
+                    } else {
+                        str +=
+                            '<div class="shop_item_box" lay-href="/shop/detail?id=' + item.ID + '">' +
+                            '<img width="100%" src="/assets/images/shop/' + inx + '/1.jpg">' +
+                            '<div class="shop_intro t_hide2">' + item.ShopName + '&nbsp;' + item.ShopAddress + '</div>' +
+                            '<div class="shop_price_inx"><span>¥268起</span><span class="shop_price_spa">¥298</span></div>' +
+                            '</div>'
+
+                    }
+
+                })
+
+                $('.shop_list_content').html(str)
+
+            }, success: function (res) {
+            }, complete: function () {
+
+            }
+        });
+
+
+    });
+</script>

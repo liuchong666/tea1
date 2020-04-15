@@ -1,0 +1,54 @@
+﻿@using WK.Tea.DataModel;
+@model VOrderModel
+
+<div class="layui-fluid">
+    <div class="layui-card card-radius15">
+        <img src="~/assets/images/shop/@Model.ShopID/1.jpg" style="width:100%;" />
+    </div>
+    <div class="layui-card card-radius15">
+        <div class="layui-card-body">
+            <div class="layui-form detail-form">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">预定茶室：</label>
+                    <div class="layui-input-block">
+                        @Model.ShopName
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">服务时间：</label>
+                    <div class="layui-input-block">
+                        @Model.BTime.ToString("yyyy/MM/dd HH:mm") - @Model.ETime.ToString("yyyy/MM/dd HH:mm")
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">服务时长：</label>
+                    <div class="layui-input-block">
+                        @(Model.Duration/60) 小时
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">时长费：</label>
+                    <div class="layui-input-block">
+                        ￥@Model.FeeCode
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-card card-radius15" style="margin-bottom:60px;">
+        <div class="layui-card-header">
+            温馨提示
+        </div>
+        <div class="layui-card-body">
+            <pre>
+1.如茶室无占用情况，可提前15分钟扫描进入。
+2.茶室设有自动售货机，如又需要可自行扫码购买。
+3.请把握好使用时间，茶室将在时间结束后断开电源。
+</pre>
+        </div>
+    </div>
+    <div class="pay" lay-href="/wxpay/?id=@Model.ID">
+        去支付
+        <div class="price">￥<span>@Model.FeeCode</span></div>
+    </div>
+</div>

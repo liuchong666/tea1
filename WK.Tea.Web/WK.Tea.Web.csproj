@@ -1,0 +1,457 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0BD24715-4489-40B4-83B1-4ED7BDAA3868}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WK.Tea.Web</RootNamespace>
+    <AssemblyName>WK.Tea.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Deepleo.Weixin.SDK, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Deepleo.Weixin.SDK.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.Agent.Intercept, Version=1.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.1.2.1\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.DependencyCollector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.0.0\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.PerfCounterCollector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.0.0\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.ServerTelemetryChannel, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.0.0\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.2.0.0\lib\net45\Microsoft.AI.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.WindowsServer, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.2.0.0\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.2.0.0\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Web.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Deployment">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Helpers">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\assets\controller\common.js" />
+    <Content Include="Areas\Admin\assets\controller\console.js" />
+    <Content Include="Areas\Admin\assets\js\config.js" />
+    <Content Include="Areas\Admin\assets\js\index.js" />
+    <Content Include="assets\controller\common.js" />
+    <Content Include="assets\controller\console.js" />
+    <Content Include="assets\controller\shop.js" />
+    <Content Include="assets\fonts\iconfont.svg" />
+    <Content Include="assets\fonts\tea-icon.svg" />
+    <Content Include="assets\icon.html" />
+    <Content Include="assets\images\bg.jpg" />
+    <Content Include="assets\images\BJ0000.jpg" />
+    <Content Include="assets\images\shop\1\1.jpg" />
+    <Content Include="assets\images\shop\1\2.jpg" />
+    <Content Include="assets\images\shop\1\3.jpg" />
+    <Content Include="assets\images\shop\1\4.jpg" />
+    <Content Include="assets\images\shop\1\5.jpg" />
+    <Content Include="assets\images\logo-big.png" />
+    <Content Include="assets\images\logo.png" />
+    <Content Include="assets\images\shop\2\1.jpg" />
+    <Content Include="assets\images\shop\2\2.jpg" />
+    <Content Include="assets\images\shop\2\3.jpg" />
+    <Content Include="assets\images\shop\2\4.jpg" />
+    <Content Include="assets\images\shop\2\5.jpg" />
+    <Content Include="assets\js\config.js" />
+    <Content Include="assets\js\index.js" />
+    <Content Include="assets\layer_mobile\layer.js" />
+    <Content Include="assets\layer_mobile\need\layer.css" />
+    <Content Include="assets\layui\css\layui.css" />
+    <Content Include="assets\layui\css\layui.mobile.css" />
+    <Content Include="assets\layui\css\modules\code.css" />
+    <Content Include="assets\layui\css\modules\laydate\default\laydate.css" />
+    <Content Include="assets\layui\css\modules\layer\default\icon-ext.png" />
+    <Content Include="assets\layui\css\modules\layer\default\icon.png" />
+    <Content Include="assets\layui\css\modules\layer\default\layer.css" />
+    <Content Include="assets\layui\css\modules\layer\default\loading-0.gif" />
+    <Content Include="assets\layui\css\modules\layer\default\loading-1.gif" />
+    <Content Include="assets\layui\css\modules\layer\default\loading-2.gif" />
+    <Content Include="assets\layui\font\iconfont.svg" />
+    <Content Include="assets\layui\images\face\0.gif" />
+    <Content Include="assets\layui\images\face\1.gif" />
+    <Content Include="assets\layui\images\face\10.gif" />
+    <Content Include="assets\layui\images\face\11.gif" />
+    <Content Include="assets\layui\images\face\12.gif" />
+    <Content Include="assets\layui\images\face\13.gif" />
+    <Content Include="assets\layui\images\face\14.gif" />
+    <Content Include="assets\layui\images\face\15.gif" />
+    <Content Include="assets\layui\images\face\16.gif" />
+    <Content Include="assets\layui\images\face\17.gif" />
+    <Content Include="assets\layui\images\face\18.gif" />
+    <Content Include="assets\layui\images\face\19.gif" />
+    <Content Include="assets\layui\images\face\2.gif" />
+    <Content Include="assets\layui\images\face\20.gif" />
+    <Content Include="assets\layui\images\face\21.gif" />
+    <Content Include="assets\layui\images\face\22.gif" />
+    <Content Include="assets\layui\images\face\23.gif" />
+    <Content Include="assets\layui\images\face\24.gif" />
+    <Content Include="assets\layui\images\face\25.gif" />
+    <Content Include="assets\layui\images\face\26.gif" />
+    <Content Include="assets\layui\images\face\27.gif" />
+    <Content Include="assets\layui\images\face\28.gif" />
+    <Content Include="assets\layui\images\face\29.gif" />
+    <Content Include="assets\layui\images\face\3.gif" />
+    <Content Include="assets\layui\images\face\30.gif" />
+    <Content Include="assets\layui\images\face\31.gif" />
+    <Content Include="assets\layui\images\face\32.gif" />
+    <Content Include="assets\layui\images\face\33.gif" />
+    <Content Include="assets\layui\images\face\34.gif" />
+    <Content Include="assets\layui\images\face\35.gif" />
+    <Content Include="assets\layui\images\face\36.gif" />
+    <Content Include="assets\layui\images\face\37.gif" />
+    <Content Include="assets\layui\images\face\38.gif" />
+    <Content Include="assets\layui\images\face\39.gif" />
+    <Content Include="assets\layui\images\face\4.gif" />
+    <Content Include="assets\layui\images\face\40.gif" />
+    <Content Include="assets\layui\images\face\41.gif" />
+    <Content Include="assets\layui\images\face\42.gif" />
+    <Content Include="assets\layui\images\face\43.gif" />
+    <Content Include="assets\layui\images\face\44.gif" />
+    <Content Include="assets\layui\images\face\45.gif" />
+    <Content Include="assets\layui\images\face\46.gif" />
+    <Content Include="assets\layui\images\face\47.gif" />
+    <Content Include="assets\layui\images\face\48.gif" />
+    <Content Include="assets\layui\images\face\49.gif" />
+    <Content Include="assets\layui\images\face\5.gif" />
+    <Content Include="assets\layui\images\face\50.gif" />
+    <Content Include="assets\layui\images\face\51.gif" />
+    <Content Include="assets\layui\images\face\52.gif" />
+    <Content Include="assets\layui\images\face\53.gif" />
+    <Content Include="assets\layui\images\face\54.gif" />
+    <Content Include="assets\layui\images\face\55.gif" />
+    <Content Include="assets\layui\images\face\56.gif" />
+    <Content Include="assets\layui\images\face\57.gif" />
+    <Content Include="assets\layui\images\face\58.gif" />
+    <Content Include="assets\layui\images\face\59.gif" />
+    <Content Include="assets\layui\images\face\6.gif" />
+    <Content Include="assets\layui\images\face\60.gif" />
+    <Content Include="assets\layui\images\face\61.gif" />
+    <Content Include="assets\layui\images\face\62.gif" />
+    <Content Include="assets\layui\images\face\63.gif" />
+    <Content Include="assets\layui\images\face\64.gif" />
+    <Content Include="assets\layui\images\face\65.gif" />
+    <Content Include="assets\layui\images\face\66.gif" />
+    <Content Include="assets\layui\images\face\67.gif" />
+    <Content Include="assets\layui\images\face\68.gif" />
+    <Content Include="assets\layui\images\face\69.gif" />
+    <Content Include="assets\layui\images\face\7.gif" />
+    <Content Include="assets\layui\images\face\70.gif" />
+    <Content Include="assets\layui\images\face\71.gif" />
+    <Content Include="assets\layui\images\face\8.gif" />
+    <Content Include="assets\layui\images\face\9.gif" />
+    <Content Include="assets\layui\layui.all.js" />
+    <Content Include="assets\layui\layui.js" />
+    <Content Include="assets\layui\lay\modules\carousel.js" />
+    <Content Include="assets\layui\lay\modules\code.js" />
+    <Content Include="assets\layui\lay\modules\colorpicker.js" />
+    <Content Include="assets\layui\lay\modules\element.js" />
+    <Content Include="assets\layui\lay\modules\flow.js" />
+    <Content Include="assets\layui\lay\modules\form.js" />
+    <Content Include="assets\layui\lay\modules\jquery.js" />
+    <Content Include="assets\layui\lay\modules\laydate.js" />
+    <Content Include="assets\layui\lay\modules\layedit.js" />
+    <Content Include="assets\layui\lay\modules\layer.js" />
+    <Content Include="assets\layui\lay\modules\laypage.js" />
+    <Content Include="assets\layui\lay\modules\laytpl.js" />
+    <Content Include="assets\layui\lay\modules\mobile.js" />
+    <Content Include="assets\layui\lay\modules\rate.js" />
+    <Content Include="assets\layui\lay\modules\slider.js" />
+    <Content Include="assets\layui\lay\modules\table.js" />
+    <Content Include="assets\layui\lay\modules\transfer.js" />
+    <Content Include="assets\layui\lay\modules\tree.js" />
+    <Content Include="assets\layui\lay\modules\upload.js" />
+    <Content Include="assets\layui\lay\modules\util.js" />
+    <Content Include="assets\lib\admin.js" />
+    <Content Include="assets\lib\extend\echarts.js" />
+    <Content Include="assets\lib\extend\echartsTheme.js" />
+    <Content Include="assets\lib\extend\iscroll.js" />
+    <Content Include="assets\lib\extend\layer.js" />
+    <Content Include="assets\lib\extend\mtimer.js" />
+    <Content Include="assets\lib\view.js" />
+    <Content Include="assets\style\admin.css" />
+    <Content Include="assets\style\icon.css" />
+    <Content Include="assets\style\login.css" />
+    <Content Include="assets\style\res\bg-none.jpg" />
+    <Content Include="assets\style\res\layui-logo.jpg" />
+    <Content Include="assets\style\res\logo-black.png" />
+    <Content Include="assets\style\res\logo.png" />
+    <Content Include="assets\style\res\template\character.jpg" />
+    <Content Include="assets\style\res\template\huge.jpg" />
+    <Content Include="assets\style\res\template\portrait.png" />
+    <Content Include="assets\style\res\中冶长天16白.png" />
+    <Content Include="assets\style\res\中冶长天16黑.png" />
+    <Content Include="assets\style\res\中冶长天32白.png" />
+    <Content Include="assets\style\res\中冶长天32黑.png" />
+    <Content Include="assets\style\template.css" />
+    <Content Include="Global.asax" />
+    <Content Include="json\menu.js" />
+    <Content Include="LogWriterConfig.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="scripts\ai.0.22.9-build00167.js" />
+    <Content Include="scripts\ai.0.22.9-build00167.min.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="App_Start\WeixinConfig.cs" />
+    <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\AccountController.cs" />
+    <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Admin\Controllers\MessageController.cs" />
+    <Compile Include="Areas\Admin\Controllers\OrderController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ReportController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ShopController.cs" />
+    <Compile Include="Areas\Admin\Controllers\UserController.cs" />
+    <Compile Include="Auth\FormsAuthHelper.cs" />
+    <Compile Include="Auth\MyFormsPrincipal.cs" />
+    <Compile Include="Auth\TeaAuthorize.cs" />
+    <Compile Include="Common\EnumExtension.cs" />
+    <Compile Include="Common\HttpResponseExtension.cs" />
+    <Compile Include="Common\LogWriter.cs" />
+    <Compile Include="Common\WeixinExecutor.cs" />
+    <Compile Include="Common\WeixinTempMsg.cs" />
+    <Compile Include="Controllers\DoorController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LocationApiController.cs" />
+    <Compile Include="Controllers\OAuthController.cs" />
+    <Compile Include="Controllers\OrderApiController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
+    <Compile Include="Controllers\ShopApiController.cs" />
+    <Compile Include="Controllers\ShopController.cs" />
+    <Compile Include="Controllers\WeixinController.cs" />
+    <Compile Include="Controllers\WxPayController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\JSSDKModel.cs" />
+    <Compile Include="Models\LoginViewModel.cs" />
+    <Compile Include="Models\ResultMsg.cs" />
+    <Compile Include="Models\StatusCodeEnum.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\web.config" />
+    <Content Include="packages.config" />
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Areas\Admin\Views\web.config" />
+    <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Admin\Views\Home\Default.cshtml" />
+    <Content Include="Areas\Admin\Views\Home\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Home\Layout.cshtml" />
+    <Content Include="Areas\Admin\Views\Shop\Index.cshtml" />
+    <Content Include="assets\fonts\iconfont.eot" />
+    <Content Include="assets\fonts\iconfont.ttf" />
+    <Content Include="assets\fonts\iconfont.woff" />
+    <Content Include="assets\fonts\tea-icon.eot" />
+    <Content Include="assets\fonts\tea-icon.ttf" />
+    <Content Include="assets\fonts\tea-icon.woff" />
+    <Content Include="assets\layui\font\iconfont.eot" />
+    <Content Include="assets\layui\font\iconfont.ttf" />
+    <Content Include="assets\layui\font\iconfont.woff" />
+    <Content Include="assets\layui\font\iconfont.woff2" />
+    <Content Include="Views\Home\Default.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Layout.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Admin\Views\Order\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Report\Profits.cshtml" />
+    <Content Include="Areas\Admin\Views\Account\Login.cshtml" />
+    <Content Include="Areas\Admin\Views\App\Index.cshtml" />
+    <None Include="Properties\PublishProfiles\TeaWeb.pubxml" />
+    <Content Include="Views\Shop\Index.cshtml" />
+    <Content Include="Views\Shop\Detail.cshtml" />
+    <Content Include="Views\OAuth\Failed.cshtml" />
+    <Content Include="Views\Door\Qrcode.cshtml" />
+    <Content Include="Views\WxPay\Index.cshtml" />
+    <Content Include="Views\Order\Settlement.cshtml" />
+    <Content Include="Views\WxPay\Success.cshtml" />
+    <Content Include="Views\WxPay\Failed.cshtml" />
+    <Content Include="Views\Order\XuDing.cshtml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Areas\Admin\Views\Message\" />
+    <Folder Include="Views\Shared\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WK.Tea.DataModel\WK.Tea.DataModel.csproj">
+      <Project>{059d8209-2b35-4d10-99ce-3984aa3c0bea}</Project>
+      <Name>WK.Tea.DataModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WK.Tea.DataProvider\WK.Tea.DataProvider.csproj">
+      <Project>{fb5e2464-d42c-4efd-8599-2b8cae727a49}</Project>
+      <Name>WK.Tea.DataProvider</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WK.Tea.Lock.ApiRequest\WK.Tea.Lock.ApiRequest.csproj">
+      <Project>{A34D2D4C-8FF9-43CA-91FC-41735212A7C3}</Project>
+      <Name>WK.Tea.Lock.ApiRequest</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>13066</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:13066/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

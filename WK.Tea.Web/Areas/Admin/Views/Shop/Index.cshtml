@@ -1,0 +1,335 @@
+﻿
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>门店管理</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid" id="LAY-shop">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="LAY-shop-btns" style="margin-bottom: 10px;">
+                <button class="layui-btn layui-btn-primary layui-btn-sm" data-events="add">添加门店</button>
+            </div>
+            <table id="LAY-shop-list" lay-filter="LAY-shop-list"></table>
+        </div>
+    </div>
+</div>
+
+<script id="shopFormTpl" type="text/html">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-form" lay-filter="shopForm">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">门店名称</label>
+                    <div class="layui-input-block">
+                        <input type="hidden" name="ID" />
+                        <input type="text" name="ShopName" class="layui-input" lay-verify="required" placeholder="请输入门店名称" autocomplete="off">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">地区</label>
+                    <div class="layui-input-inline">
+                        <select name="ProvinceID" lay-filter="selProvince" lay-verify="required">
+                            <option value="">请选择省</option>
+                        </select>
+                    </div>
+                    <div class="layui-input-inline">
+                        <select name="CityID" lay-filter="selCity" lay-verify="required">
+                            <option value="">请选择市</option>
+                        </select>
+                    </div>
+                    <div class="layui-input-inline">
+                        <select name="AreaID" lay-filter="selArea" lay-verify="required">
+                            <option value="">请选择县/区</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">详细地址</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="ShopAddress" class="layui-input" lay-verify="required" placeholder="请输入详细地址" autocomplete="off">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">联系人</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="ShopContacts" class="layui-input" lay-verify="required" placeholder="请输入联系人" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">联系电话</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="ShopPhoneNum" class="layui-input" lay-verify="required" placeholder="请输入联系电话" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">楼栋号</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="BuildNo" class="layui-input" lay-verify="required" placeholder="请输入楼栋号" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">楼层号</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="FloorNo" class="layui-input" lay-verify="required" placeholder="请输入楼层号" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">房间号</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="RoomNo" class="layui-input" lay-verify="required" placeholder="请输入房间号" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">状态</label>
+                        <div class="layui-input-block">
+                            <select name="Flag" lay-filter="selFlag" lay-verify="required">
+                                <option value="0">营业</option>
+                                <option value="1">休息</option>
+                                <option value="2">建设中</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-hide">
+                    <button class="layui-btn" lay-submit="" lay-filter="saveShop"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script>
+    layui.use(['admin', 'table', 'form'], function () {
+        var $ = layui.jquery
+            , admin = layui.admin
+            , table = layui.table
+            , form = layui.form
+            , layer = layui.layer;
+
+        var flagTpl = function (d) {
+            if (d.Flag == 0) {
+                return "营业"
+            } else if (d.Flag == 1) {
+                return "休息"
+            } else if (d.Flag == 2) {
+                return "建设中"
+            }
+        }
+
+        var addressTpl = function (d) {
+            return d.ProvinceName + d.CityName + d.AreaName + d.ShopAddress;
+        }
+
+        table.render({
+            elem: '#LAY-shop-list'
+              , url: '/api/shop/pagelist'
+              , page: true
+              , limit: 30
+              , cols: [[
+                { field: 'ShopName', title: '店铺名称' }
+                , { field: 'Address', title: '详细地址', width: 200, templet: addressTpl }
+                , { field: 'ShopContacts', title: '联系人', width: 100 }
+                , { field: 'ShopPhoneNum', title: '联系电话', width: 170 }
+                , { field: 'Flag', title: '状态', width: 80, templet: flagTpl }
+              , {
+                  width: 220, title: "操作", align: "center", toolbar: '<div><a lay-event="edit" class="layui-btn layui-btn-primary layui-btn-xs" href="javascript:;">编辑</a><a lay-event="del" class="layui-btn layui-btn-primary layui-btn-xs" href="javascript:;">删除</a><div>'
+              }
+              ]]
+              , skin: 'line'
+        });
+
+        table.on('tool(LAY-shop-list)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent == "edit") {
+                layer.open({
+                    type: 1,
+                    title: "修改门店",
+                    area: ["780px"],
+                    btn: ["确定", "取消"],
+                    content: $('#shopFormTpl').html(),
+                    success: function (layero, index) {
+                        $(layero).children('.layui-layer-content').css('overflow', 'visible');
+
+                        initProvinceSel(data.ProvinceID);
+                        initCitySel(data.ProvinceID, data.CityID);
+                        initAreaSel(data.CityID, data.AreaID);
+
+                        form.val("shopForm", data);
+
+                        form.render();
+                        form.on('select(selProvince)', function (data) {
+                            initCitySel(data.value);
+                        });
+                        form.on('select(selCity)', function (data) {
+                            initAreaSel(data.value);
+                        });
+                        form.on('submit(saveShop)', function (data) {
+                            var loadIndex = layer.msg("数据处理中，请稍后！", { icon: 16, time: false, shade: 0.5 });
+
+                            admin.req({
+                                url: '/api/shop/edit'
+                                , type: 'post'
+                                , data: JSON.stringify(data.field)
+                                , contentType: "application/json"
+                                , done: function (res) { //这里要说明一下：done 是只有 response 的 code 正常才会执行。而 succese 则是只要 http 为 200 就会执行
+
+                                    layer.msg('保存成功', { icon: 1 });
+                                    table.reload('LAY-shop-list');
+                                    layer.close(index);
+                                }, success: function (res) {
+                                }, complete: function () {
+                                    layer.close(loadIndex);
+                                }
+                            });
+                            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                        });
+                    },
+                    yes: function (index, layero) {
+                        $('[lay-filter="saveShop"]').trigger("click");
+                    }
+                })
+            } else if (layEvent == "del") {
+                layer.confirm("确定是否删除此数据？", function (index) {
+                    var loadIndex = layer.msg("数据处理中，请稍后！", { icon: 16, time: false, shade: 0.5 });
+                    admin.req({
+                        url: '/api/shop/' + data.ID + '/delete'
+                        , type: 'post'
+                        , data: {}
+                        , contentType: "application/json"
+                        , done: function (res) { //这里要说明一下：done 是只有 response 的 code 正常才会执行。而 succese 则是只要 http 为 200 就会执行
+
+                            layer.msg('删除成功', { icon: 1 });
+                            table.reload('LAY-shop-list');
+                            //layer.close(index);
+                        }, success: function (res) {
+                        }, complete: function () {
+                            layer.close(loadIndex);
+                        }
+                    });
+                    //layer.close(index);
+                })
+            }
+        });
+
+        $('.LAY-shop-btns .layui-btn').on('click', function () {
+            var othis = $(this)
+            , thisEvent = othis.data('events')
+            events[thisEvent] && events[thisEvent].call(this, othis);
+        });
+
+
+        //事件处理
+        var events = {
+            add: function (othis) {
+                layer.open({
+                    type: 1,
+                    title: "添加门店",
+                    area: ["780px"],
+                    btn: ["确定", "取消"],
+                    content: $('#shopFormTpl').html(),
+                    success: function (layero, index) {
+                        $(layero).children('.layui-layer-content').css('overflow', 'visible');
+                        
+                        initProvinceSel();
+                        form.render();
+                        form.on('select(selProvince)', function (data) {
+                            initCitySel(data.value);
+                        });
+                        form.on('select(selCity)', function (data) {
+                            initAreaSel(data.value);
+                        });
+                        form.on('submit(saveShop)', function (data) {
+                            var loadIndex = layer.msg("数据处理中，请稍后！", { icon: 16, time: false, shade: 0.5 });
+                            
+                            admin.req({
+                                url: '/api/shop/add'
+                                , type: 'post'
+                                , data: JSON.stringify(data.field)
+                                , contentType: "application/json"
+                                , done: function (res) { //这里要说明一下：done 是只有 response 的 code 正常才会执行。而 succese 则是只要 http 为 200 就会执行
+
+                                    layer.msg('保存成功', { icon: 1 });
+                                    table.reload('LAY-shop-list');
+                                    layer.close(index);
+                                }, success: function (res) {
+                                }, complete: function () {
+                                    layer.close(loadIndex);
+                                }
+                            });
+                            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                        });
+                    },
+                    yes: function (index, layero) {
+                        $('[lay-filter="saveShop"]').trigger("click");
+                    }
+                })
+            }
+        };
+
+
+        function initProvinceSel(selectedVal) {
+            admin.req({
+                url: '/api/location/provinces'
+                , type: 'get'
+                , data: {}
+                , done: function (res) { //这里要说明一下：done 是只有 response 的 code 正常才会执行。而 succese 则是只要 http 为 200 就会执行
+                    var sel = $('select[name="ProvinceID"]');
+                    layui.each(res.data, function (index, item) {
+                        sel.append('<option value="' + item.ProvinceID + '"' + (selectedVal && selectedVal == item.ProvinceID ? ' selected' : '') + '>' + item.ProvinceName + '</option>');
+                    });
+                    form.render('select');
+                }
+            });
+        }
+
+        function initCitySel(provinceId, selectedVal) {
+            var sel = $('select[name="CityID"]');
+            sel.empty();
+            sel.append('<option value="">请选择市</option>');
+            admin.req({
+                url: '/api/location/cities'
+                , type: 'get'
+                , data: {
+                    provinceId: provinceId
+                }
+                , done: function (res) { //这里要说明一下：done 是只有 response 的 code 正常才会执行。而 succese 则是只要 http 为 200 就会执行
+
+                    layui.each(res.data, function (index, item) {
+                        sel.append('<option value="' + item.CityID + '"' + (selectedVal && selectedVal == item.CityID ? ' selected' : '') + '>' + item.CityName + '</option>');
+                    });
+                    form.render('select');
+                }
+            });
+        }
+
+        function initAreaSel(cityId, selectedVal) {
+            var sel = $('select[name="AreaID"]');
+            sel.empty();
+            sel.append('<option value="">请选择县/区</option>');
+            admin.req({
+                url: '/api/location/areas'
+                , type: 'get'
+                , data: {
+                    cityId: cityId
+                }
+                , done: function (res) { //这里要说明一下：done 是只有 response 的 code 正常才会执行。而 succese 则是只要 http 为 200 就会执行
+
+                    layui.each(res.data, function (index, item) {
+                        sel.append('<option value="' + item.AreaID + '"' + (selectedVal && selectedVal == item.AreaID ? ' selected' : '') + '>' + item.AreaName + '</option>');
+                    });
+                    form.render('select');
+                }
+            });
+        }
+    });
+
+</script>

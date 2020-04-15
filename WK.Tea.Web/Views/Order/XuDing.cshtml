@@ -1,0 +1,297 @@
+﻿
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+        <legend>订单续费</legend>
+    </fieldset>
+
+<div class="layui-row">
+    <div class="layui-col-xs1 layui-col-sm1">
+
+    </div>
+
+    <div class="layui-col-xs10 layui-col-sm10">
+        <form class="layui-form" action="" method="POST">
+            <div class="layui-form-item">
+                <label class="layui-form-label">预定手机号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="mobile" lay-verify="mobile" autocomplete="off" placeholder="预定手机号" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux" id="search">
+                    <button type="submit" class="layui-btn layui-btn-primary layui-btn-sm" lay-filter="search" lay-submit>检索订单</button>
+                </div>
+            </div>
+            <div style="display: none;" id="content">
+                <div class="layui-form-item" id="beginTime">
+                    <label class="layui-form-label">开始时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="BTime" lay-verify="BTime" autocomplete="off" placeholder="开始时间" class="layui-input" disabled>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-item-separatorline" id="choiceTimeLong">
+                    <label class="layui-form-label">预定时长</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" readonly="readonly" value="0.5小时" />
+                        <input type="hidden" name="Duration" value="30" />
+                        <input type="hidden" name="ParentNo" value="0" />
+                        <input type="hidden" name="FeeCode" value="50" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">消费金额</label>
+                    <div class="layui-input-block">
+                        <span class="layui-badge layui-bg-orange"><span id="price">50</span>元</span>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button type="submit" class="layui-btn" lay-submit="" lay-filter="pay">去支付</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="layui-col-xs1 layui-col-sm1">
+
+    </div>
+</div>
+<script type="text/javascript" src="~/assets/layer_mobile/layer.js"></script>
+<script type="text/javascript">
+    layui.use(['admin', 'mtimer', 'form', 'carousel'], function () {
+        var carousel = layui.carousel
+            , $ = layui.jquery
+            , form = layui.form
+            , mtimer = layui.mtimer
+            , admin = layui.admin
+            , router = layui.router()
+            , orderTime = {};
+
+        var nowDate = new Date(),
+            nY = nowDate.getFullYear(),
+            nM = nowDate.getMonth(),
+            nD = nowDate.getDate(),
+            nH = nowDate.getHours(),
+            nMin = nowDate.getMinutes();
+
+        for (var i = 0; i < 10; i++) {
+            var nextDate = new Date(nY, nM, nD + i),
+                y = nextDate.getFullYear(),
+                m = nextDate.getMonth() + 1,
+                d = nextDate.getDate();
+
+            getOrderTime(y + "/" + m + "/" + d);
+        }
+
+        function getOrderTime(date) {
+            admin.req({
+                url: '/api/order/used/times'
+                , type: 'get'
+                , data: {
+                    shopId: 1,
+                    dateTime: date
+                }
+                , done: function (res) { //这里要说明一下：done 是只有 response 的 code 正常才会执行。而 succese 则是只要 http 为 200 就会执行
+                    orderTime[date] = res.data;
+                }, error: function (res) {
+                }, complete: function () {
+                }
+            });
+        }
+
+        if (nMin >= 30) {
+            nH++;
+            nMin = "00";
+        } else {
+            nMin = "30";
+        }
+        if (nH < 10) {
+            nH = "0" + nH;
+        }
+
+        $('#choiceStartTime input[type=text]').val((nM + 1) + "月" + nD + "日 " + nH + ":" + nMin);
+        $('input[name="BTime"]').val(nowDate.getFullYear() + "/" + (nM + 1) + "/" + nD + " " + nH + ":" + nMin);
+
+
+        mtimer.render({
+            elem: '#choiceStartTime',
+            click: function (value) {
+                $('input[name="BTime"]').val(value);
+            },
+            dateClick: function (value) {
+                return orderTime;
+            }
+        });
+
+        mtimer.render({
+            type: 2,
+            elem: '#choiceTimeLong',
+            initData: function () {
+                var choiceStartTime = new Date($('input[name="BTime"]').val()),
+                    data = [],
+                    timeLong = 30,
+                    totalTime = choiceStartTime.getTime();
+
+                for (var j = 0; j < 18; j++) {
+                    nextTotalTime = totalTime + timeLong * 60 * 1000;
+                    nextTime = new Date(nextTotalTime);
+
+                    var nextExcludeTimes = orderTime[nextTime.getFullYear() + "/" + (nextTime.getMonth() + 1) + "/" + nextTime.getDate()];
+                    isOrdered = nextExcludeTimes && nextExcludeTimes.indexOf(nextTime.format("yyyy-MM-dd hh:mm:ss")) > -1;
+
+                    if (!isOrdered) {
+                        data.push(timeLong);
+                    } else {
+                        break;
+                    }
+                    timeLong += 30;
+                }
+                return data;
+            },
+            click: function (value) {
+                $('input[name="Duration"]').val(value);
+                var price = 50;
+                var t = value - 30;
+                price += t / 30 * 50;
+
+                var timelong = parseFloat(value) / 60;
+                $("#price").text(price);
+                //$(".timelong").text(timelong);
+            }
+        });
+
+        //$('.settlement .right').click(function () {
+        //    $('[lay-filter="saveOrder"]').trigger("click");
+        //});
+
+        form.on('submit(search)', function (data) {
+            console.log(data.field);
+            var loadIndex = layer.open({
+                type: 2,
+                content: '正在检索订单'
+            });
+
+            $.ajax({
+                type: "POST",
+                url: '/api/order/wx/search',
+                data: data.field,
+                //请求成功
+                success: function(res) {
+                    if (res.code === 200) {
+                        $("#content").show();
+                        $("#search").hide();
+                        $('input[name="BTime"]').val(res.data.ETime);
+                        $('input[name="ParentNo"]').val(res.data.OrderNo);
+                    } else {
+                        $("#content").hide();
+                        $("#search").show();
+                        $('input[name="BTime"]').val('');
+                        $('input[name="ParentNo"]').val('');
+                        layer.open({
+                            content: res.msg ? res.msg : res
+                            , btn: '我知道了'
+                        });
+                    }
+                },
+                //请求失败，包含具体的错误信息
+                error: function(e) {
+                    $("#content").hide();
+                    $("#search").show();
+                    $('input[name="BTime"]').val('');
+                    $('input[name="ParentNo"]').val('');
+                    layer.open({
+                        content: res.msg ? res.msg : res
+                        , btn: '我知道了'
+                    });
+                },complete: function () {
+                            layer.close(loadIndex);
+                        }
+            });
+
+            //admin.req({
+            //    url: '/api/order/wx/search'
+            //    , type: 'post'
+            //    , data: JSON.stringify(data.field)
+            //    , contentType: "application/json"
+            //    , done: function (res) { //这里要说明一下：done 是只有 response 的 code 正常才会执行。而 succese 则是只要 http 为 200 就会执行
+            //        alert(res.code);
+            //        if (res.code === 200) {
+            //            alert(2);
+            //            $("#content").show();
+            //            $('input[name="beginTime"]').val(res.data.ETime);
+            //        } else {
+            //            alert(1);
+            //            $("#content").hide();
+            //            layer.open({
+            //                content: res.msg ? res.msg : res
+            //                , btn: '我知道了'
+            //            });
+            //        }
+                    
+
+            //    }, error: function (res) {
+            //        alert(3);
+            //        layer.open({
+            //            content: res.msg ? res.msg : res
+            //            , btn: '我知道了'
+            //        });
+            //    }, complete: function () {
+            //        layer.close(loadIndex);
+            //    }
+            //});
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+
+        $('input[name="mobile"]').on("input", function (e) {
+            $("#content").hide();
+            $("#search").show();
+            $('input[name="BTime"]').val('');
+            $('input[name="ParentNo"]').val('');
+        });
+
+        form.on('submit(pay)', function (data) {
+            console.log(data.field);
+            var loadIndex = layer.open({
+                type: 2,
+                content: '正在检索订单'
+            });
+
+            $.ajax({
+                type: "POST",
+                url: '/api/order/wx/xuding',
+                data: data.field,
+                //请求成功
+                success: function(res) {
+                    if (res.code === 200) {
+                        window.location.hash = "/order/settlement?id=" + res.data.ID;
+                    } else {
+                        
+                        layer.open({
+                            content: res.msg ? res.msg : res
+                            , btn: '我知道了'
+                        });
+                    }
+                },
+                //请求失败，包含具体的错误信息
+                error: function(e) {
+                    $("#content").hide();
+                    layer.open({
+                        content: res.msg ? res.msg : res
+                        , btn: '我知道了'
+                    });
+                },complete: function () {
+                            layer.close(loadIndex);
+                        }
+            });
+
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+
+        //图片轮播
+        var ins = carousel.render({
+            elem: '#test1'
+            , width: '100%'
+            , height: '230px'
+            , interval: 5000
+        });
+
+
+    });
+</script>

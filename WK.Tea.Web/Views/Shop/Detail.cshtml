@@ -1,0 +1,283 @@
+﻿@using WK.Tea.DataModel;
+@model VShopModel
+
+<div class="layui-fluid">
+    <div class="layui-card  pos">
+        <div class="layui-carousel" id="test1">
+            <div carousel-item>
+                <div><img width="100%" src="~/assets/images/shop/@Model.ID/1.jpg"></div>
+                <div><img width="100%" src="~/assets/images/shop/@Model.ID/2.jpg"></div>
+                <div><img width="100%" src="~/assets/images/shop/@Model.ID/3.jpg"></div>
+                <div><img width="100%" src="~/assets/images/shop/@Model.ID/4.jpg"></div>
+                <div><img width="100%" src="~/assets/images/shop/@Model.ID/5.jpg"></div>
+            </div>
+        </div>
+        <div class='line_box'></div>
+    </div>
+    <div class='det_box'>
+
+        <div class="layui-card card-radius15 detail-info">
+            <div class="layui-card-header p0  detail_name">
+                @Model.ShopName
+            </div>
+
+            <div class="detail-info-in p0 layui-clear">
+                <div style="float:left; width:80%">
+                    <img style="width:12px; " src="/assets/images/shop_icon1.png" />@Model.ShopAddress
+                </div>
+                <div style="float:right; width:18%; border-left:1px solid #f6f6f6; text-align:center;">
+                    <a href="tel:@Model.ShopPhoneNum"><img style="width:12px; " src="/assets/images/shop_icon2.png" /></a>
+                </div>
+            </div>
+
+        </div>
+        <div class="layui-card card-radius15">
+            <!-- <div class="layui-card-header" style="text-align:center;">
+                <i class="layui-icon layui-icon-log"></i>选择预定时间
+            </div> -->
+            <div class="layui-card-body">
+                <div class="layui-form input-form">
+                    <div class="layui-form-item layui-item-separatorline" id="choiceStartTime">
+                        <label class="layui-form-label tl">预定时间</label>
+                        <div class="layui-input-block ml88">
+                            <input type="text" class="layui-input detail_input" readonly="readonly" value="" />
+                            <input type="hidden" name="ShopID" value="@Model.ID" />
+                            <input type="hidden" name="BTime" />
+                            <img class='shop_down_icon' style="width:14px; " src="/assets/images/shop_down.png" />
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-item-separatorline" id="choiceTimeLong">
+                        <label class="layui-form-label tl">预定时长</label>
+                        <div class="layui-input-block ml88">
+                            <input type="text" class="layui-input detail_input" readonly="readonly" value="2小时" />
+                            <input type="hidden" name="Duration" value="120" />
+                            <input type="hidden" name="FeeCode" value="288" />
+                            <img class='shop_down_icon' style="width:14px; " src="/assets/images/shop_down.png" />
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label tl">预留手机</label>
+                        <div class="layui-input-block ml88 spa_input">
+                            <input type="text" name="Mobile" id="telephone" maxlength="11" placeholder="点击预留手机号" class="layui-input detail_input" lay-verify="required|phone" value="" />
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-hide">
+                        <button class="layui-btn" @*lay-submit="" lay-filter="saveOrder"*@></button>
+                    </div>
+
+                    <div class='settlement row jb'>
+                        <div class='left_box'>
+                            <div class='price_box'>¥<span class="price">288</span></div>
+                            <div class='shop_time'><span class="timelong">2</span>小时</div>
+
+                        </div>
+                        <div class='shop_btn' lay-submit="" lay-filter="saveOrder">
+                            确认并支付
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="layui-card card-radius15 shop_tip_box" style="margin-bottom:80px;">
+                <div class="layui-card-header fs16">
+                    <img class='shop_tip_icon' style="width:14px; " src="/assets/images/shop_tip.png" />使用说明
+                </div>
+                <div class="layui-tip">
+                    <pre>
+1、本茶舍2小时起订，后面每半个小时加50元
+2、禁止黄赌毒
+3、禁止外带
+4、全部消毒
+5、损坏按价赔偿
+</pre>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="settlement">
+            <div class="left">
+                <div>￥<span class="price">288</span></div>
+                <div>共<span class="timelong">2</span>小时</div>
+            </div>
+            <div class="right">去结算</div>
+        </div> -->
+
+
+    </div>
+</div>
+<script type="text/javascript" src="~/assets/layer_mobile/layer.js"></script>
+<script type="text/javascript">
+    layui.use(['admin', 'mtimer', 'form', 'carousel'], function () {
+        var carousel = layui.carousel
+            , $ = layui.jquery
+        , form = layui.form
+        , mtimer = layui.mtimer
+        , admin = layui.admin
+        , router = layui.router()
+        , orderTime = {};
+
+        var nowDate = new Date(),
+            nY = nowDate.getFullYear(),
+            nM = nowDate.getMonth(),
+            nD = nowDate.getDate(),
+            nH = nowDate.getHours(),
+            nMin = nowDate.getMinutes();
+
+        for (var i = 0; i < 10; i++) {
+            var nextDate = new Date(nY, nM, nD + i),
+                y = nextDate.getFullYear(),
+                m = nextDate.getMonth() + 1,
+                d = nextDate.getDate();
+
+            getOrderTime(y + "/" + m + "/" + d);
+        }
+
+        function getOrderTime(date){
+            admin.req({
+                url: '/api/order/used/times'
+                , type: 'get'
+                , data: {
+                    shopId: @Model.ID,
+                    dateTime: date
+                }
+                , done: function (res) { //这里要说明一下：done 是只有 response 的 code 正常才会执行。而 succese 则是只要 http 为 200 就会执行
+                    orderTime[date] = res.data;
+                }, error: function (res) {
+                }, complete: function () {
+                }
+            });
+        }
+
+        if (nMin >= 30) {
+            nH++;
+            nMin = "00";
+        } else {
+            nMin = "30";
+        }
+        if (nH < 10) {
+            nH = "0" + nH;
+        }
+
+        $('#choiceStartTime input[type=text]').val((nM + 1) + "月" + nD + "日 " + nH + ":" + nMin);
+        $('input[name="BTime"]').val(nowDate.getFullYear() + "/" + (nM + 1) + "/" + nD + " " + nH + ":" + nMin);
+
+
+        mtimer.render({
+            elem: '#choiceStartTime',
+            click: function (value) {
+                $('input[name="BTime"]').val(value);
+            },
+            dateClick: function(value){
+                return orderTime;
+            }
+        });
+
+        mtimer.render({
+            type: 2,
+            elem: '#choiceTimeLong',
+            initData: function(){
+                var choiceStartTime = new Date($('input[name="BTime"]').val()),
+                    data = [],
+                    timeLong = 120,
+                    totalTime = choiceStartTime.getTime();
+
+                for (var j = 0; j < 18; j++) {
+                    nextTotalTime = totalTime + timeLong * 60 * 1000;
+                    nextTime = new Date(nextTotalTime);
+
+                    var nextExcludeTimes = orderTime[nextTime.getFullYear() + "/" + (nextTime.getMonth() + 1) + "/" + nextTime.getDate()];
+                    isOrdered = nextExcludeTimes && nextExcludeTimes.indexOf(nextTime.format("yyyy-MM-dd hh:mm:ss")) > -1;
+
+                    if (!isOrdered) {
+                        data.push(timeLong);
+                    }else{
+                        break;
+                    }
+                    timeLong += 30;
+                }
+                return data;
+            },
+            click: function (value) {
+                $('input[name="Duration"]').val(value);
+                var price = 288;
+                var t = value - 120;
+                price += t / 30 * 50;
+
+                var timelong = parseFloat(value) / 60;
+                $(".price").text(price);
+                $(".timelong").text(timelong);
+
+
+
+
+            }
+        });
+
+        $('.settlement .canClick').click(function () {
+            var tel=$('#telephone').val();
+            var sReg=/^1\d{10}$/;
+            if( $(".shop_btn").hasClass('canClick')){
+            $('[lay-filter="saveOrder"]').trigger("click");
+            }
+
+        });
+
+        form.on('submit(saveOrder)', function (data) {
+            var loadIndex = layer.open({
+                type: 2
+                , content: '正在提交订单'
+            })
+            admin.req({
+                url: '/api/order/wx/add'
+                , type: 'post'
+                , data: JSON.stringify(data.field)
+                , contentType: "application/json"
+                , done: function (res) { //这里要说明一下：done 是只有 response 的 code 正常才会执行。而 succese 则是只要 http 为 200 就会执行
+
+                    window.location.hash = "/order/settlement?id=" + res.data.ID;
+                }, error: function(res){
+                    layer.open({
+                        content: res.msg ? res.msg : res
+                        , btn: '我知道了'
+                    });
+                }, complete: function () {
+                    layer.close(loadIndex);
+                }
+            });
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+
+        //图片轮播
+        var ins = carousel.render({
+            elem: '#test1'
+          , width: '100%'
+          , height: '230px'
+          , interval: 5000
+        });
+
+  $('#telephone').on("input", function () {
+            var tel=$(this).val();
+            var sReg=/^1\d{10}$/;
+            if(sReg.test(tel)){
+                $(".shop_btn").addClass('canClick')
+
+            }else{
+                $(".shop_btn").removeClass('canClick')
+
+            }
+
+
+
+        });
+
+
+
+
+
+
+
+
+    });
+
+
+</script>

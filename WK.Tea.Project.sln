@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WK.Tea.Web", "WK.Tea.Web\WK.Tea.Web.csproj", "{0BD24715-4489-40B4-83B1-4ED7BDAA3868}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WK.Tea.DataModel", "WK.Tea.DataModel\WK.Tea.DataModel.csproj", "{059D8209-2B35-4D10-99CE-3984AA3C0BEA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WK.Tea.DataProvider", "WK.Tea.DataProvider\WK.Tea.DataProvider.csproj", "{FB5E2464-D42C-4EFD-8599-2B8CAE727A49}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WK.Tea.Lock.ApiRequest", "WK.Tea.Lock.ApiRequest\WK.Tea.Lock.ApiRequest.csproj", "{A34D2D4C-8FF9-43CA-91FC-41735212A7C3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0BD24715-4489-40B4-83B1-4ED7BDAA3868}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BD24715-4489-40B4-83B1-4ED7BDAA3868}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BD24715-4489-40B4-83B1-4ED7BDAA3868}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BD24715-4489-40B4-83B1-4ED7BDAA3868}.Release|Any CPU.Build.0 = Release|Any CPU
+		{059D8209-2B35-4D10-99CE-3984AA3C0BEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{059D8209-2B35-4D10-99CE-3984AA3C0BEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{059D8209-2B35-4D10-99CE-3984AA3C0BEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{059D8209-2B35-4D10-99CE-3984AA3C0BEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB5E2464-D42C-4EFD-8599-2B8CAE727A49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB5E2464-D42C-4EFD-8599-2B8CAE727A49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB5E2464-D42C-4EFD-8599-2B8CAE727A49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB5E2464-D42C-4EFD-8599-2B8CAE727A49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A34D2D4C-8FF9-43CA-91FC-41735212A7C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A34D2D4C-8FF9-43CA-91FC-41735212A7C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A34D2D4C-8FF9-43CA-91FC-41735212A7C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A34D2D4C-8FF9-43CA-91FC-41735212A7C3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

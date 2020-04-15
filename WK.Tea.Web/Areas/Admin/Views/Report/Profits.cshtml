@@ -1,0 +1,112 @@
+﻿<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>报表统计</cite></a>
+        <a><cite>收益统计</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid" id="LAY-report-profits">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-form" lay-filter="profitsOrderSearch">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">统计方式：</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" name="ReportWay[1]" lay-skin="primary" value="1" title="按茶室">
+                            <input type="checkbox" name="ReportWay[2]" lay-skin="primary" value="2" title="按天">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">筛选日期：</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="SearchDate" id="SearchDate" class="layui-input" placeholder=" - " autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-primary" lay-filter="search" lay-submit="">查询</button>
+                    </div>
+                </div>
+            </div>
+            <table id="LAY-report-profits-list" lay-filter="LAY-report-profits-list">
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    layui.use(['admin', 'table', 'form', 'laydate'], function () {
+        var $ = layui.jquery
+            , admin = layui.admin
+            , table = layui.table
+            , form = layui.form
+            , laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#SearchDate'
+            , type: 'date'
+            , range: '-'
+            , format: 'yyyy/MM/dd'
+        });
+
+
+        table.render({
+            elem: '#LAY-report-profits-list'
+            , cols: [[
+                { field: "text", align: "center" }
+            ]]
+            , data: [
+                { text: "请选择统计方式和筛选条件进行查询！"}
+            ]
+            , skin: 'line'
+        });
+
+        form.on('submit(search)', function (data) {
+            console.log(data.field);
+
+            var paramData = {};
+            paramData["SearchDate"] = data.field.SearchDate;
+            paramData["ReportWay"] = "";
+            for (var key in data.field) {
+                if (key.indexOf("ReportWay") > -1) {
+                    if (paramData["ReportWay"] != "") {
+                        paramData["ReportWay"] += ","
+                    }
+                    paramData["ReportWay"] += data.field[key];
+                }
+            }
+
+            var cols = [];
+            var col0 = [];
+
+            if (data.field["ReportWay[1]"]) {
+                col0.push({ field: 'ShopName', title: '茶室' });
+            }
+            if (data.field["ReportWay[2]"]) {
+                col0.push({ field: 'Date', title: '日期' });
+            }
+            col0.push({ field: 'TotalOrderCount', title: '订单数', totalRow: true, width: 120 });
+            col0.push({ field: 'TotalDuration', title: '总时长', totalRow: true, width: 120 });
+            col0.push({ field: 'TotalMoney', title: '总金额', totalRow: true, width: 120 });
+            cols.push(col0);
+            console.log(col0);
+            table.reload('LAY-report-profits-list', {
+                url: '/api/order/report'
+                , toolbar: '#orderToolbarTpl'
+                , where: paramData
+                , limit: 10000
+                , text: {
+                    none: '暂无相关数据！'
+                }
+                , page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+                , defaultToolbar: ['filter', 'exports', 'print']
+                , cols: cols
+            });
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+    });
+</script>

@@ -1,0 +1,59 @@
+﻿@using WK.Tea.Web.Models
+@model LoginViewModel
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>管理平台</title>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="~/assets/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="~/assets/style/login.css" media="all">
+    <script>
+        /^http(s*):\/\//.test(location.href) || alert('请先部署到 localhost 下再访问');
+    </script>
+</head>
+<body>
+    <div id="LAY_app">
+
+        <div class="layadmin-user-login layadmin-user-display-show" id="LAY-user-login" style="display: none;">
+
+            <div class="layadmin-user-login-main">
+                <div class="layadmin-user-login-box layadmin-user-login-header">
+                    <h2>倒茶</h2>
+                    <p>管理平台</p>
+                </div>
+                <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
+                    @using (Html.BeginForm("Login", "Account", new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="layui-form-item">
+                            <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="LAY-user-login-username"></label>
+                            @Html.TextBoxFor(m => m.UserName, new { @class = "layui-input", placeholder = "用户名" })
+                        </div>
+                        <div class="layui-form-item" style="margin-bottom: 20px;">
+                            <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="LAY-user-login-password"></label>
+                            @Html.PasswordFor(m => m.Password, new { placeholder = "密码", @class = "layui-input" })
+                        </div>
+
+                        <div class="layui-form-item">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger", style = "color:red;" })
+                        </div>
+                        <div class="layui-form-item">
+                            <input type="submit" class="layui-btn layui-btn-fluid" value="登 入" onclick="javascript: this.value = '正在登录中...';" />
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="layui-trans layadmin-user-login-footer">
+
+
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

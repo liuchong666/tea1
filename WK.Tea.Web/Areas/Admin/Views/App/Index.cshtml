@@ -1,0 +1,69 @@
+﻿
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>用户管理</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid" id="LAY-order">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            @*<div class="layui-form" lay-filter="orderSearch">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">茶室</label>
+                            <div class="layui-input-block">
+                                <select name="SearchShopID">
+                                    <option value="">请选择</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">日期</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="SearchDate" id="SearchDate" class="layui-input" placeholder=" - " autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-primary" lay-filter="search" lay-submit="">筛选</button>
+                        </div>
+                    </div>
+                </div>*@
+            <table id="LAY-order-list" lay-filter="LAY-order-list"></table>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    layui.use(['admin', 'table', 'form', 'laydate'], function () {
+        var $ = layui.jquery
+            , admin = layui.admin
+            , table = layui.table
+            , form = layui.form
+            , layer = layui.layer
+            , laydate = layui.laydate;
+
+
+        table.render({
+            elem: '#LAY-order-list'
+            , url: '/api/order/userstatics'
+            , toolbar: '#orderToolbarTpl'
+            , page: true
+            , limit: 30
+            //, where: {
+            //    SearchDate:
+            //}
+            , defaultToolbar: ['filter', 'exports', 'print']
+            , cols: [[
+                { field: 'UserName', title: '用户姓名' }
+                , { field: 'Balance', title: '余额' }
+                , { field: 'Points', title: '积分' }
+            ]]
+            , skin: 'line'
+        });
+
+    });
+
+</script>

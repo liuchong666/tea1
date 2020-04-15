@@ -1,0 +1,550 @@
+﻿
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>订单管理</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid" id="LAY-order">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-form" lay-filter="orderSearch">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">茶室</label>
+                        <div class="layui-input-block">
+                            <select name="SearchShopID">
+                                <option value="">请选择</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">日期</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="SearchDate" id="SearchDate" class="layui-input" placeholder=" - " autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-primary" lay-filter="search" lay-submit="">筛选</button>
+                    </div>
+                </div>
+            </div>
+            <table id="LAY-order-list" lay-filter="LAY-order-list"></table>
+        </div>
+    </div>
+</div>
+
+<script id="orderToolbarTpl" type="text/html">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="add">添加订单</button>
+    </div>
+</script>
+
+<script id="orderFormTpl" type="text/html">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-form" lay-filter="orderForm">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">茶室</label>
+                    <div class="layui-input-block">
+                        <input type="hidden" name="ID" />
+                        <select name="ShopID" lay-filter="selShop" lay-verify="required">
+                            <option value="">请选择茶室</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">手机号码</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="Mobile" class="layui-input" lay-verify="required|phone" placeholder="请输入手机号码" autocomplete="off">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">开始时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="BTime" name="BTime" class="layui-input" lay-verify="required" placeholder="请选择开始时间" autocomplete="off">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">结束时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="ETime" name="ETime" class="layui-input" lay-verify="required" placeholder="请选择结束时间" autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">订单号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="OrderNo" class="layui-input" lay-verify="required" readonly placeholder="请输入订单号" autocomplete="off">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">券码</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="Ver_Code" class="layui-input" placeholder="请输入券码" autocomplete="off">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">订单金额</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="FeeCode" class="layui-input" lay-verify="required" placeholder="请输入订单金额" autocomplete="off">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">备注类型</label>
+                    <div class="layui-input-block">
+                        <select name="ReMarks" lay-filter="selReMarks" lay-verify="required">
+                            <option value="0">验券后客服代订</option>
+                            <option value="1">公众号预定</option>
+                            <option value="2">微信或现金转账代订</option>
+                            <option value="3">免费使用</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">订单状态</label>
+                    <div class="layui-input-block">
+                        <select name="PayStatus" lay-filter="selStatus" lay-verify="required">
+                            <option value="0">未支付</option>
+                            <option value="1">已支付</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-hide">
+                    <label class="layui-form-label">门锁链接</label>
+                    <div class="layui-input-block">
+                        <textarea id="DoorUrl" class="layui-textarea" style="height:90px;"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-hide">
+                    <button class="layui-btn" lay-submit="" lay-filter="saveOrder"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script id="renewFormTpl" type="text/html">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-form" lay-filter="renewForm">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">开始时间</label>
+                    <div class="layui-input-block">
+                        <input type="hidden" name="ParentNo" />
+                        <input type="text" id="BTime" name="BTime" class="layui-input" lay-verify="required" placeholder="请选择开始时间" autocomplete="off">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">结束时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="ETime" name="ETime" class="layui-input" lay-verify="required" placeholder="请选择结束时间" autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">订单号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="OrderNo" class="layui-input" lay-verify="required" readonly placeholder="请输入订单号" autocomplete="off">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">券码</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="Ver_Code" class="layui-input" placeholder="请输入券码" autocomplete="off">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">订单金额</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="FeeCode" class="layui-input" lay-verify="required" placeholder="请输入订单金额" autocomplete="off">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">备注类型</label>
+                    <div class="layui-input-block">
+                        <select name="ReMarks" lay-filter="selReMarks" lay-verify="required">
+                            <option value="0">验券后客服代订</option>
+                            <option value="1">公众号预定</option>
+                            <option value="2">微信或现金转账代订</option>
+                            <option value="3">免费使用</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">订单状态</label>
+                    <div class="layui-input-block">
+                        <select name="PayStatus" lay-filter="selStatus" lay-verify="required">
+                            <option value="0">未支付</option>
+                            <option value="1">已支付</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-hide">
+                    <button class="layui-btn" lay-submit="" lay-filter="saveRenew"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script>
+    layui.use(['admin', 'table', 'form', 'laydate'], function () {
+        var $ = layui.jquery
+            , admin = layui.admin
+            , table = layui.table
+            , form = layui.form
+            , layer = layui.layer
+            , laydate = layui.laydate;
+
+        var flagTpl = function (d) {
+            if (d.Flag == 1) {
+                return "续订"
+            } else {
+                return ""
+            }
+        }
+        initShopSel($('select[name="SearchShopID"]'));
+
+        laydate.render({
+            elem: '#SearchDate'
+            , type: 'date'
+            , range: '-'
+            , format: 'yyyy/MM/dd'
+        });
+
+        var btimeTpl = function (d) {
+
+            return new Date(d.BTime).Format("yyyy/MM/dd HH:mm");
+        }
+
+        var payStatusTpl = function (d) {
+            if (d.PayStatus == 0) {
+                return "未支付"
+            } else if (d.PayStatus == 1) {
+                return "已支付"
+            } else {
+                return ""
+            }
+        }
+
+        var etimeTpl = function (d) {
+
+            return new Date(d.ETime).Format("yyyy/MM/dd HH:mm");
+        }
+
+        var durationTpl = function (d) {
+            return parseFloat(d.Duration) / 60 + "小时";
+        }
+
+        var reMarksTpl = function (d) {
+            if (d.ReMarks == 0) {
+                return "验券后客服代订"
+            } else if (d.ReMarks == 1) {
+                return "公众号预定"
+            } else if (d.ReMarks == 2) {
+                return "微信或现金转账代订"
+            } else if (d.ReMarks == 3) {
+                return "免费使用"
+            } else {
+                return ""
+            }
+        }
+
+        var feeCodeTpl = function (d) {
+            return "￥" + d.FeeCode;
+        }
+
+        table.render({
+            elem: '#LAY-order-list'
+              , url: '/api/order/pagelist'
+              , toolbar: '#orderToolbarTpl'
+              , page: true
+              , limit: 30
+              //, where: {
+              //    SearchDate:
+              //}
+              , defaultToolbar: ['filter', 'exports', 'print']
+              , cols: [[
+                { field: 'OrderNo', title: '订单号' }
+                , { field: 'ShopName', title: '茶室' }
+                  , { field: 'Mobile', title: '预定人电话', hide: true }
+                  , { field: 'BTime', title: '开始时间', width: 145, templet: btimeTpl }
+                , { field: 'ETime', title: '结束时间', width: 145, templet: etimeTpl }
+                , { field: 'Duration', title: '时长', width: 85, templet: durationTpl }
+                , { field: 'ReMarks', title: '备注', templet: reMarksTpl, hide: true }
+                , { field: 'FeeCode', title: '金额', width: 90, templet: feeCodeTpl }
+                , { field: 'PayStatus', title: '支付状态', width: 80, templet: payStatusTpl }
+                , { field: 'Flag', title: '状态', width: 60, templet: flagTpl, hide: true }
+                , {
+                    width: 220, title: "操作", align: "center", toolbar: '<div>{{# if(d.Flag==0){ }}<a lay-event="renew" class="layui-btn layui-btn-primary layui-btn-xs" href="javascript:;">续订</a>{{# } }}<a lay-event="view" class="layui-btn layui-btn-primary layui-btn-xs" href="javascript:;">查看</a><a lay-event="edit" class="layui-btn layui-btn-primary layui-btn-xs" href="javascript:;">编辑</a><a lay-event="del" class="layui-btn layui-btn-primary layui-btn-xs" href="javascript:;">删除</a><div>'
+                }
+              ]]
+              , skin: 'line'
+        });
+
+        form.on('submit(search)', function (data) {
+            console.log(data);
+            table.reload('LAY-order-list', {
+                where: data.field,
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            })
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+
+        table.on('toolbar(LAY-order-list)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'add':
+                    layer.open({
+                        type: 1,
+                        title: "添加订单",
+                        area: ["600px"],
+                        btn: ["确定", "取消"],
+                        content: $('#orderFormTpl').html(),
+                        success: function (layero, index) {
+                            $(layero).children('.layui-layer-content').css('overflow', 'visible');
+                            laydate.render({
+                                elem: '#BTime'
+                                , type: 'datetime'
+                            });
+                            laydate.render({
+                                elem: '#ETime'
+                                , type: 'datetime'
+                            });
+                            initShopSel($('select[name="ShopID"]'));
+
+                            admin.req({
+                                url: '/api/order/mtl/number'
+                                , type: 'get'
+                                , data: {}
+                                , done: function (res) { //这里要说明一下：done 是只有 response 的 code 正常才会执行。而 succese 则是只要 http 为 200 就会执行
+                                    $('input[name="OrderNo"]').val(res.data);
+
+                                }
+                            });
+                            form.render();
+
+                            form.on('submit(saveOrder)', function (data) {
+                                var loadIndex = layer.msg("数据处理中，请稍后！", { icon: 16, time: false, shade: 0.5 });
+                                admin.req({
+                                    url: '/api/order/admin/add'
+                                    , type: 'post'
+                                    , data: JSON.stringify(data.field)
+                                    , contentType: "application/json"
+                                    , done: function (res) { //这里要说明一下：done 是只有 response 的 code 正常才会执行。而 succese 则是只要 http 为 200 就会执行
+
+                                        layer.msg('添加成功', { icon: 1 });
+                                        table.reload('LAY-order-list');
+                                        layer.close(index);
+                                    }, success: function (res) {
+                                    }, complete: function () {
+                                        layer.close(loadIndex);
+                                    }
+                                });
+                                return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                            });
+                        },
+                        yes: function (index, layero) {
+                            $('[lay-filter="saveOrder"]').trigger("click");
+                        }
+                    });
+                    break;
+            };
+        });
+
+        table.on("tool(LAY-order-list)", function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent == "edit") {
+                layer.open({
+                    type: 1,
+                    title: "修改订单",
+                    area: ["600px"],
+                    btn: ["确定", "取消"],
+                    content: $('#orderFormTpl').html(),
+                    success: function (layero, index) {
+                        $(layero).children('.layui-layer-content').css('overflow', 'visible');
+                        laydate.render({
+                            elem: '#BTime'
+                            , type: 'datetime'
+                        });
+                        laydate.render({
+                            elem: '#ETime'
+                            , type: 'datetime'
+                        });
+                        initShopSel($('select[name="ShopID"]'), data.ShopID);
+
+                        form.val("orderForm", data);
+
+                        form.render();
+                        form.on('submit(saveOrder)', function (data) {
+                            var loadIndex = layer.msg("数据处理中，请稍后！", { icon: 16, time: false, shade: 0.5 });
+
+                            admin.req({
+                                url: '/api/order/admin/edit'
+                                , type: 'post'
+                                , data: JSON.stringify(data.field)
+                                , contentType: "application/json"
+                                , done: function (res) { //这里要说明一下：done 是只有 response 的 code 正常才会执行。而 succese 则是只要 http 为 200 就会执行
+
+                                    layer.msg('保存成功', { icon: 1 });
+                                    table.reload('LAY-order-list');
+                                    layer.close(index);
+                                }, success: function (res) {
+                                }, complete: function () {
+                                    layer.close(loadIndex);
+                                }
+                            });
+                            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                        });
+                    },
+                    yes: function (index, layero) {
+                        $('[lay-filter="saveOrder"]').trigger("click");
+                    }
+                })
+            } else if (layEvent == "view") {
+                layer.open({
+                    type: 1,
+                    title: "订单详细",
+                    area: ["600px"],
+                    content: $('#orderFormTpl').html(),
+                    success: function (layero, index) {
+                        //$(layero).children('.layui-layer-content').css('overflow', 'visible');
+                        
+                        initShopSel($('select[name="ShopID"]'), data.ShopID);
+                        var doorText = $(layero).find('#DoorUrl');
+                        doorText.parents('.layui-form-item').removeClass('layui-hide');
+                        doorText.attr("readonly", "readonly");
+                        doorText.val("您好您的茶室预订成功!" +
+                            "\n门店地址:" + data.ShopAddress +
+                            "\n客服:" + data.ShopPhoneNum +
+                            "\n预订时间:" + data.BTime + "到" + data.ETime +
+                           "\n请于开始时间15分钟前点开下面链接获取开门二维码:\n" +
+                            "http://" + window.location.host + "/Door/Qrcode?orderId=" + data.ID);
+                        form.val("orderForm", data);
+                        $(layero).find('.layui-form input[type=text]').each(function () {
+                            $(this).attr("readonly", "readonly");
+                        });
+                        $(layero).find('.layui-form select').each(function () {
+                            $(this).attr("disabled", "disabled");
+                        });
+                        form.render();
+                    }
+                })
+            } else if (layEvent == "del") {
+                layer.confirm("确定是否删除此数据？", function (index) {
+                    var loadIndex = layer.msg("数据处理中，请稍后！", { icon: 16, time: false, shade: 0.5 });
+                    admin.req({
+                        url: '/api/order/' + data.ID + '/delete'
+                        , type: 'post'
+                        , data: {}
+                        , contentType: "application/json"
+                        , done: function (res) { //这里要说明一下：done 是只有 response 的 code 正常才会执行。而 succese 则是只要 http 为 200 就会执行
+
+                            layer.msg('删除成功', { icon: 1 });
+                            table.reload('LAY-order-list');
+                        }, success: function (res) {
+                        }, complete: function () {
+                            layer.close(loadIndex);
+                        }
+                    });
+                })
+            } else if (layEvent == "renew") {
+                layer.open({
+                    type: 1,
+                    title: "续订",
+                    area: ["600px"],
+                    btn: ["确定", "取消"],
+                    content: $('#renewFormTpl').html(),
+                    success: function (layero, index) {
+                        $(layero).children('.layui-layer-content').css('overflow', 'visible');
+                        laydate.render({
+                            elem: '#BTime'
+                            , type: 'datetime'
+                        });
+                        laydate.render({
+                            elem: '#ETime'
+                            , type: 'datetime'
+                        });
+
+                        $('input[name="ParentNo"]').val(data.OrderNo);
+                        admin.req({
+                            url: '/api/order/rmtl/number'
+                            , type: 'get'
+                            , data: {}
+                            , done: function (res) { //这里要说明一下：done 是只有 response 的 code 正常才会执行。而 succese 则是只要 http 为 200 就会执行
+                                $('input[name="OrderNo"]').val(res.data);
+                            }
+                        });
+                        form.render();
+                        form.on('submit(saveRenew)', function (data) {
+                            var loadIndex = layer.msg("数据处理中，请稍后！", { icon: 16, time: false, shade: 0.5 });
+
+                            admin.req({
+                                url: '/api/order/admin/renew'
+                                , type: 'post'
+                                , data: JSON.stringify(data.field)
+                                , contentType: "application/json"
+                                , done: function (res) { //这里要说明一下：done 是只有 response 的 code 正常才会执行。而 succese 则是只要 http 为 200 就会执行
+
+                                    layer.msg('保存成功', { icon: 1 });
+                                    table.reload('LAY-order-list');
+                                    layer.close(index);
+                                }, success: function (res) {
+                                }, complete: function () {
+                                    layer.close(loadIndex);
+                                }
+                            });
+                            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                        });
+                    },
+                    yes: function (index, layero) {
+                        $('[lay-filter="saveRenew"]').trigger("click");
+                    }
+                })
+            }
+        });
+
+        function initShopSel(elem, selectedVal) {
+            admin.req({
+                url: '/api/shop/list'
+                , type: 'get'
+                , data: {}
+                , done: function (res) { //这里要说明一下：done 是只有 response 的 code 正常才会执行。而 succese 则是只要 http 为 200 就会执行
+                    //var sel = $('select[name="ShopID"]');
+                    layui.each(res.data, function (index, item) {
+                        elem.append('<option value="' + item.ID + '"' + (selectedVal && selectedVal == item.ID ? ' selected' : '') + '>' + item.ShopName + '</option>');
+                    });
+                    form.render('select');
+                }
+            });
+        }
+    });
+
+    Date.prototype.Format = function (fmt) {
+        var o = {
+            "M+": this.getMonth() + 1,
+            "d+": this.getDate(),
+            "H+": this.getHours(),
+            "m+": this.getMinutes(),
+            "s+": this.getSeconds(),
+            "S+": this.getMilliseconds()
+        };
+        //因为date.getFullYear()出来的结果是number类型的,所以为了让结果变成字符串型，下面有两种方法：
+        if (/(y+)/.test(fmt)) {
+            //第一种：利用字符串连接符“+”给date.getFullYear()+""，加一个空字符串便可以将number类型转换成字符串。
+            fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        }
+        for (var k in o) {
+            if (new RegExp("(" + k + ")").test(fmt)) {
+                //第二种：使用String()类型进行强制数据类型转换String(date.getFullYear())，这种更容易理解。
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(String(o[k]).length)));
+            }
+        }
+        return fmt;
+    };
+</script>
