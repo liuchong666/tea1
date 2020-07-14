@@ -277,6 +277,9 @@ namespace WK.Tea.Web.Controllers
                                     order.OP = User.Identity.Name;
                                     order.CTime = DateTime.Now;
                                     repository.Insert(order);
+                                    string url = "http://dc.orangenet.com.cn/Door/Qrcode?orderId=" + order.ID;
+                                    WeixinTempMsg.SendManagerOrderMsg(url, shop.ShopAddress, order.BTime, order.ETime, order.FeeCode.Value);
+                                    WeixinTempMsg.SendCleanMsg(shop.ShopAddress, order.OrderNo, order.BTime, order.ETime);
                                 }
                             }
                             else
