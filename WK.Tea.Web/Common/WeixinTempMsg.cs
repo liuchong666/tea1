@@ -21,7 +21,7 @@ namespace WK.Tea.Web.Common
 
 
 
-        public static void SendOrderPaySuccessMsg(string touser, string url, string shopAddress, DateTime orderBeginTime, DateTime orderEndTime, decimal feeCode)
+        public static void SendOrderPaySuccessMsg(string touser, string url, string shopAddress, DateTime orderBeginTime, DateTime orderEndTime, decimal feeCode, string orderNo)
         {
             StringBuilder jsonString = new StringBuilder();
 
@@ -34,27 +34,27 @@ namespace WK.Tea.Web.Common
             jsonString.AppendFormat("\"value\":\"{0}\"", "尊敬的客户，您好！您预订的茶室支付结果通知");
             jsonString.Append("},");
             jsonString.Append("\"keyword1\":{");
-            jsonString.AppendFormat("\"value\":\"{0}\",", shopAddress);
-            jsonString.AppendFormat("\"color\":\"{0}\"", "#576b95");
-            jsonString.Append("},");
-            jsonString.Append("\"keyword2\":{");
-            jsonString.AppendFormat("\"value\":\"{0} 到 {1}\",", orderBeginTime.ToString("yyyy/MM/dd HH:mm"), orderEndTime.ToString("yyyy/MM/dd HH:mm"));
-            jsonString.AppendFormat("\"color\":\"{0}\"", "#576b95");
-            jsonString.Append("},");
-            jsonString.Append("\"keyword3\":{");
             jsonString.AppendFormat("\"value\":\"{0} 元\", ", feeCode);
             jsonString.AppendFormat("\"color\":\"{0}\"", "#576b95");
             jsonString.Append("},");
+
+            jsonString.Append("\"keyword2\":{");
+            jsonString.AppendFormat("\"value\":\"{0}\",", shopAddress);
+            jsonString.AppendFormat("\"color\":\"{0}\"", "#ff0000");
+            jsonString.Append("},");
+
+            jsonString.Append("\"keyword3\":{");
+            jsonString.AppendFormat("\"value\":\"{0} 到 {1}\",", orderBeginTime.ToString("yyyy/MM/dd HH:mm"), orderEndTime.ToString("yyyy/MM/dd HH:mm"));
+            jsonString.AppendFormat("\"color\":\"{0}\"", "#ff0000");
+            jsonString.Append("},");
+
             jsonString.Append("\"keyword4\":{");
-            jsonString.AppendFormat("\"value\":\"{0}\",", "支付成功");
+            jsonString.AppendFormat("\"value\":\"{0}\",", orderNo);
             jsonString.AppendFormat("\"color\":\"{0}\"", "#576b95");
             jsonString.Append("},");
-            jsonString.Append("\"keyword5\":{");
-            jsonString.AppendFormat("\"value\":\"{0}\",", "点击查看门锁二维码");
-            jsonString.AppendFormat("\"color\":\"{0}\"", "#576b95");
-            jsonString.Append("},");
+
             jsonString.Append("\"remark\":{");
-            jsonString.AppendFormat("\"value\":\"{0}\"", "");
+            jsonString.AppendFormat("\"value\":\"{0}\"", "点击查看门锁二维码");
             jsonString.Append("}");
             jsonString.Append("}");
             jsonString.Append("}");
@@ -64,7 +64,7 @@ namespace WK.Tea.Web.Common
             LogWriter.Default.WriteError("Send Message, Content:" + jsonString.ToString() + ", Result: " + DynamicJson.Serialize(sendResult));
         }
 
-        public static void SendManagerOrderMsg(string url, string shopAddress, DateTime orderBeginTime, DateTime orderEndTime, decimal feeCode)
+        public static void SendManagerOrderMsg(string url, string shopAddress, DateTime orderBeginTime, DateTime orderEndTime, decimal feeCode,string orderNo,int type=0)
         {
             foreach (var touser in WeixinConfig.ManagerId)
             {
@@ -76,30 +76,31 @@ namespace WK.Tea.Web.Common
                 jsonString.AppendFormat("\"url\":\"{0}\",", url);
                 jsonString.Append("\"data\":{");
                 jsonString.Append("\"first\":{");
-                jsonString.AppendFormat("\"value\":\"{0}\"", "尊敬的管理员，您好！客户预定茶室支付结果通知");
+                jsonString.AppendFormat("\"value\":\"{0}\"", $"尊敬的管理员，您好！客户{(type == 0 ? "预定" : "续订")}茶室支付结果通知");
                 jsonString.Append("},");
+
                 jsonString.Append("\"keyword1\":{");
-                jsonString.AppendFormat("\"value\":\"{0}\",", shopAddress);
-                jsonString.AppendFormat("\"color\":\"{0}\"", "#576b95");
-                jsonString.Append("},");
-                jsonString.Append("\"keyword2\":{");
-                jsonString.AppendFormat("\"value\":\"{0} 到 {1}\",", orderBeginTime.ToString("yyyy/MM/dd HH:mm"), orderEndTime.ToString("yyyy/MM/dd HH:mm"));
-                jsonString.AppendFormat("\"color\":\"{0}\"", "#576b95");
-                jsonString.Append("},");
-                jsonString.Append("\"keyword3\":{");
                 jsonString.AppendFormat("\"value\":\"{0} 元\", ", feeCode);
                 jsonString.AppendFormat("\"color\":\"{0}\"", "#576b95");
                 jsonString.Append("},");
+
+                jsonString.Append("\"keyword2\":{");
+                jsonString.AppendFormat("\"value\":\"{0}\",", shopAddress);
+                jsonString.AppendFormat("\"color\":\"{0}\"", "#ff0000");
+                jsonString.Append("},");
+
+                jsonString.Append("\"keyword3\":{");
+                jsonString.AppendFormat("\"value\":\"{0} 到 {1}\",", orderBeginTime.ToString("yyyy/MM/dd HH:mm"), orderEndTime.ToString("yyyy/MM/dd HH:mm"));
+                jsonString.AppendFormat("\"color\":\"{0}\"", "#ff0000");
+                jsonString.Append("},");
+                
                 jsonString.Append("\"keyword4\":{");
-                jsonString.AppendFormat("\"value\":\"{0}\",", "支付成功");
+                jsonString.AppendFormat("\"value\":\"{0}\",", orderNo);
                 jsonString.AppendFormat("\"color\":\"{0}\"", "#576b95");
                 jsonString.Append("},");
-                jsonString.Append("\"keyword5\":{");
-                jsonString.AppendFormat("\"value\":\"{0}\",", "点击查看门锁二维码");
-                jsonString.AppendFormat("\"color\":\"{0}\"", "#576b95");
-                jsonString.Append("},");
+
                 jsonString.Append("\"remark\":{");
-                jsonString.AppendFormat("\"value\":\"{0}\"", "");
+                jsonString.AppendFormat("\"value\":\"{0}\"", "点击查看门锁二维码");
                 jsonString.Append("}");
                 jsonString.Append("}");
                 jsonString.Append("}");
@@ -111,7 +112,7 @@ namespace WK.Tea.Web.Common
             
         }
 
-        public static void SendCleanMsg(string shopAddress, string orderNo, DateTime orderBeginTime, DateTime orderEndTime)
+        public static void SendCleanMsg(string shopAddress, string orderNo, DateTime orderBeginTime, DateTime orderEndTime,int type=0)
         {
             StringBuilder jsonString = new StringBuilder();
 
@@ -121,22 +122,15 @@ namespace WK.Tea.Web.Common
             //jsonString.AppendFormat("\"url\":\"{0}\",", url);
             jsonString.Append("\"data\":{");
             jsonString.Append("\"first\":{");
-            jsonString.AppendFormat("\"value\":\"{0}\"", "保洁服务提醒：");
+            jsonString.AppendFormat("\"value\":\"{0}\"", shopAddress);
+            //jsonString.AppendFormat("\"color\":\"{0}\"", "#ff0000");
             jsonString.Append("},");
             jsonString.Append("\"keyword1\":{");
-            jsonString.AppendFormat("\"value\":\"{0}\",", shopAddress);
+            jsonString.AppendFormat("\"value\":\"{0}\",", orderNo);
             jsonString.AppendFormat("\"color\":\"{0}\"", "#ff0000");
             jsonString.Append("},");
             jsonString.Append("\"keyword2\":{");
-            jsonString.AppendFormat("\"value\":\"{0}\",", "保洁清扫");
-            jsonString.AppendFormat("\"color\":\"{0}\"", "#576b95");
-            jsonString.Append("},");
-            jsonString.Append("\"keyword3\":{");
-            jsonString.AppendFormat("\"value\":\"{0}\", ", orderNo);
-            jsonString.AppendFormat("\"color\":\"{0}\"", "#576b95");
-            jsonString.Append("},");
-            jsonString.Append("\"keyword4\":{");
-            jsonString.AppendFormat("\"value\":\"使用结束时间为{0}\",", orderEndTime.ToString("yyyy/MM/dd HH:mm"));
+            jsonString.AppendFormat("\"value\":\"{1}结束时间为{0}\",", orderEndTime.ToString("yyyy/MM/dd HH:mm"), (type == 0 ? "使用" : "续订"));
             jsonString.AppendFormat("\"color\":\"{0}\"", "#ff0000");
             jsonString.Append("},");
             jsonString.Append("\"remark\":{");

@@ -221,8 +221,8 @@ namespace WK.Tea.Web.Controllers
 
                             //TODO:postData中携带该次支付的用户相关信息，这将便于商家拿到openid，以便后续提供更好的售后服务，譬如：微信公众好通知用户付款成功。如果不提供服务则可以删除此代码
                             string url = "http://dc.orangenet.com.cn/Door/Qrcode?orderId=" + order.ID;
-                            WeixinTempMsg.SendOrderPaySuccessMsg(openid, url, shop.ShopAddress, order.BTime, order.ETime, order.FeeCode.Value);
-                            WeixinTempMsg.SendManagerOrderMsg(url, shop.ShopAddress, order.BTime, order.ETime, order.FeeCode.Value);
+                            WeixinTempMsg.SendOrderPaySuccessMsg(openid, url, shop.ShopAddress, order.BTime, order.ETime, order.FeeCode.Value,order.OrderNo);
+                            WeixinTempMsg.SendManagerOrderMsg(url, shop.ShopAddress, order.BTime, order.ETime, order.FeeCode.Value,order.OrderNo);
                             //WeixinTempMsg.SendCleanMsg(shop.ShopAddress, order.OrderNo, order.BTime, order.ETime);
                         }
                         else
