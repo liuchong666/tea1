@@ -119,5 +119,34 @@ namespace WK.Tea.DataProvider.DAL
 
             return query.FirstOrDefault(o => o.ID == id);
         }
+        
+        public VOrderModel GetVOrderByOrderNo(string orderNo)
+        {
+            var query = from o in context.T_Order
+                            join s in context.T_Shop on o.ShopID.ToString() equals s.ID.ToString()
+                            select new VOrderModel
+                            {
+                                ID = o.ID,
+                                Mobile = o.Mobile,
+                                ShopID = o.ShopID,
+                                ShopName = s.ShopName,
+                                BTime = o.BTime,
+                                ETime = o.ETime,
+                                Duration = o.Duration,
+                                Ver_Code = o.Ver_Code,
+                                OrderNo = o.OrderNo,
+                                ParentNo = o.ParentNo,
+                                CardNo = o.CardNo,
+                                CTime = o.CTime,
+                                FeeCode = o.FeeCode,
+                                ReMarks = o.ReMarks,
+                                Flag = o.Flag,
+                                PayStatus = o.PayStatus,
+                                ShopAddress=s.ShopAddress,
+                                ShopPhoneNum=s.ShopPhoneNum
+                            };
+
+            return query.FirstOrDefault(o => o.OrderNo == orderNo);
+        }
     }
 }

@@ -23,6 +23,8 @@ namespace WK.Tea.DataProvider.IDAL
 
         VOrderModel GetVOrderByID(int id);
 
+        VOrderModel GetVOrderByOrderNo(string orderNo);
+
         List<OrderStatics> GetOrderStatics();
 
         string GetOrderStaticsData();

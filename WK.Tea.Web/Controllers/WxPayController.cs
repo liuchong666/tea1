@@ -8,6 +8,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml.Linq;
+using WK.Tea.DataModel;
 using WK.Tea.DataModel.SqlModel;
 using WK.Tea.DataProvider.DAL;
 using WK.Tea.DataProvider.IDAL;
@@ -48,7 +49,7 @@ namespace WK.Tea.Web.Controllers
                     var appId = System.Configuration.ConfigurationManager.AppSettings["AppId"];
                     var nonceStr = Util.CreateNonce_str();
                     var timestamp = Util.CreateTimestamp();
-                    var success_redict_url = string.Format("{0}/WxPay/Success", domain);
+                    var success_redict_url = string.Format("{0}/WxPay/Success?orderNo={1}", domain,order.OrderNo);
                     var url = domain + Request.Url.PathAndQuery;
                     var userAgent = Request.UserAgent;
                     var userVersion = userAgent.Substring(userAgent.LastIndexOf("MicroMessenger/") + 15, 3);//微信版本号高于或者等于5.0才支持微信支付
@@ -116,6 +117,7 @@ namespace WK.Tea.Web.Controllers
                         err_code_des = err_code_des,
                         success_redict_url = success_redict_url
                     };
+
                     return View(model);
                 }
                 else
@@ -129,9 +131,14 @@ namespace WK.Tea.Web.Controllers
                 return RedirectToAction("Failed", new { msg = "(代码:200)" + ex.Message });
             }
         }
-        public ActionResult Success()
+        public ActionResult Success(string orderNo)
         {
-            return View();
+            VOrderModel order = null; ;
+            using (IT_Order repository = new T_OrderRepository())
+            {
+                order = repository.GetVOrderByOrderNo(orderNo);
+            }
+            return View(order);
         }
 
         public ActionResult Failed(string msg)

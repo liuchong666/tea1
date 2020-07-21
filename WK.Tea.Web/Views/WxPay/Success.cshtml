@@ -1,1 +1,12 @@
-﻿<h2 style="color:blue">恭喜，支付成功!</h2>
+﻿@using WK.Tea.DataModel;
+@model VOrderModel
+<h1 style="color:blue">您好您的茶室@(Model.OrderNo.Contains("XDWX")?"续订": "预订") 成功!</h1>
+<h2 style="color:blue">门店地址:@Model.ShopAddress</h2>
+<h2 style="color:blue">客服：@Model.ShopPhoneNum</h2>
+<h2 style="color:blue">预定手机：@Model.Mobile</h2>
+<h2 style="color:red">@(Model.OrderNo.Contains("XDWX")?"续订": "预订")时间：@Model.BTime-@Model.ETime</h2>
+<h2 style="color:red">支付金额：@Model.FeeCode</h2>
+<strong>
+    请于开始时间15分钟前点开下面链接获取开门二维码:
+    <a href='http://dc.orangenet.com.cn/Door/Qrcode?orderId="@Model.ID '>点此获取二维码</a>
+</strong>
