@@ -1,7 +1,4 @@
-﻿<title>倒茶</title>
-
-
-<div class="layui-fluid ">
+﻿<div class="layui-fluid ">
     <!-- <div carousel-item>
                  <div><img width="100%" src="~/assets/images/bg.jpg"></div>
              </div> -->
@@ -170,12 +167,22 @@
                             '</div>'
 
                     } else {
-                        str +=
-                            '<div class="shop_item_box" lay-href="/shop/detail?id=' + item.ID + '">' +
-                            '<img width="100%" src="/assets/images/shop/' + inx + '/1.jpg">' +
-                            '<div class="shop_intro t_hide2">' + item.ShopName + '&nbsp;' + item.ShopAddress + '</div>' +
-                            '<div class="shop_price_inx"><span>¥268起</span><span class="shop_price_spa">¥298</span></div>' +
-                            '</div>'
+                        if (item.ID === 6) {
+                            str +=
+                                '<div class="shop_item_box" lay-href="/shop/detail?id=' + item.ID + '">' +
+                            '<img width="100%" src="/assets/images/shop/' + item.ID  + '/1.jpg">' +
+                                '<div class="shop_intro t_hide2">' + item.ShopName + '&nbsp;' + item.ShopAddress + '</div>' +
+                                '<div class="shop_price_inx"><span>¥588起</span><span class="shop_price_spa">¥758</span></div>' +
+                                '</div>'
+                        } else {
+                            str +=
+                                '<div class="shop_item_box" lay-href="/shop/detail?id=' + item.ID + '">' +
+                            '<img width="100%" src="/assets/images/shop/' + item.ID + '/1.jpg">' +
+                                '<div class="shop_intro t_hide2">' + item.ShopName + '&nbsp;' + item.ShopAddress + '</div>' +
+                                '<div class="shop_price_inx"><span>¥268起</span><span class="shop_price_spa">¥298</span></div>' +
+                                '</div>'
+                        }
+                        
 
                     }
 
