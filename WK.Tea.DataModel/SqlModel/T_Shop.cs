@@ -31,5 +31,7 @@ namespace WK.Tea.DataModel.SqlModel
         public string RoomNo { get; set; }
         public Nullable<byte> Flag { get; set; }
         public Nullable<System.DateTime> CTime { get; set; }
+
+        public string CleanerOpenID { get; set; }
     }
 }

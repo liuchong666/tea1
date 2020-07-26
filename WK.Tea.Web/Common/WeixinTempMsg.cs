@@ -112,13 +112,13 @@ namespace WK.Tea.Web.Common
             
         }
 
-        public static void SendCleanMsg(string shopAddress, string orderNo, DateTime orderBeginTime, DateTime orderEndTime,int type=0)
+        public static void SendCleanMsg(string shopAddress, string orderNo, DateTime orderBeginTime, DateTime orderEndTime,string cleanOpenId,int type=0)
         {
             StringBuilder jsonString = new StringBuilder();
 
             jsonString.Append("{");
             jsonString.AppendFormat("\"template_id\":\"{0}\",", WeixinConfig.CleanMsgTemplateId);
-            jsonString.AppendFormat("\"touser\":\"{0}\",", WeixinConfig.CleanerId);
+            jsonString.AppendFormat("\"touser\":\"{0}\",", cleanOpenId);
             //jsonString.AppendFormat("\"url\":\"{0}\",", url);
             jsonString.Append("\"data\":{");
             jsonString.Append("\"first\":{");

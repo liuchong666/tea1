@@ -29,7 +29,7 @@ namespace WK.Tea.Web.Areas.Admin.Controllers
                     shop = repository.FindFirstOrDefault(o => o.ID == order.ShopID);
                 }
                 if (shop != null)
-                    WeixinTempMsg.SendCleanMsg(shop.ShopAddress, order.OrderNo, order.BTime, order.ETime);
+                    WeixinTempMsg.SendCleanMsg(shop.ShopAddress, order.OrderNo, order.BTime, order.ETime,shop.CleanerOpenID);
                 return Json("发送成功", JsonRequestBehavior.AllowGet);
             }
 

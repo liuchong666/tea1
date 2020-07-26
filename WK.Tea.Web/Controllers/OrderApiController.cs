@@ -279,7 +279,7 @@ namespace WK.Tea.Web.Controllers
                                     repository.Insert(order);
                                     string url = "http://dc.orangenet.com.cn/Door/Qrcode?orderId=" + order.ID;
                                     WeixinTempMsg.SendManagerOrderMsg(url, shop.ShopAddress, order.BTime, order.ETime, order.FeeCode.Value, order.OrderNo,1);
-                                    WeixinTempMsg.SendCleanMsg(shop.ShopAddress, order.OrderNo, order.BTime, order.ETime,1);
+                                    WeixinTempMsg.SendCleanMsg(shop.ShopAddress, order.OrderNo, order.BTime, order.ETime, shop.CleanerOpenID, 1);
                                 }
                             }
                             else
@@ -378,6 +378,9 @@ namespace WK.Tea.Web.Controllers
                                     order.Flag = 0;
                                     order.OP = User.Identity.Name;
                                     repository.Insert(order);
+                                    string url = "http://dc.orangenet.com.cn/Door/Qrcode?orderId=" + order.ID;
+                                    WeixinTempMsg.SendManagerOrderMsg(url, shop.ShopAddress, order.BTime, order.ETime, order.FeeCode.Value, order.OrderNo, 1);
+                                    WeixinTempMsg.SendCleanMsg(shop.ShopAddress, order.OrderNo, order.BTime, order.ETime, shop.CleanerOpenID, 1);
                                 }
                             }
                             else

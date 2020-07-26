@@ -472,6 +472,7 @@
                             , type: 'datetime'
                         });
 
+                        $('input[name="BTime"]').val(data.BTime);
                         $('input[name="ParentNo"]').val(data.OrderNo);
                         admin.req({
                             url: '/api/order/rmtl/number'
