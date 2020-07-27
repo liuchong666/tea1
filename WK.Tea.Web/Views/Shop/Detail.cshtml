@@ -51,7 +51,7 @@
                         <div class="layui-input-block ml88">
                             <input type="text" class="layui-input detail_input" readonly="readonly" value="2小时" />
                             <input type="hidden" name="Duration" value="120" />
-                            <input type="hidden" name="FeeCode" value="288" />
+                            <input type="hidden" name="FeeCode" value="@Model.OrderFee" />
                             <img class='shop_down_icon' style="width:14px; " src="/assets/images/shop_down.png" />
                         </div>
                     </div>
@@ -67,7 +67,7 @@
 
                     <div class='settlement row jb'>
                         <div class='left_box'>
-                            <div class='price_box'>¥<span class="price">288</span></div>
+                            <div class='price_box'>¥<span class="price">@Model.OrderFee</span></div>
                             <div class='shop_time'><span class="timelong">2</span>小时</div>
 
                         </div>
@@ -85,7 +85,7 @@
                 </div>
                 <div class="layui-tip">
                     <pre>
-1、本茶舍2小时起订，后面每半个小时加50元
+1、本茶舍2小时起订，后面每半个小时加 @Model.ReOrderFee 元
 2、禁止黄赌毒
 3、禁止外带
 4、全部消毒
@@ -199,9 +199,9 @@
             },
             click: function (value) {
                 $('input[name="Duration"]').val(value);
-                var price = 288;
+                var price = @Model.OrderFee;
                 var t = value - 120;
-                price += t / 30 * 50;
+                price += t / 30 * @Model.ReOrderFee;
 
                 var timelong = parseFloat(value) / 60;
                 $(".price").text(price);

@@ -29,6 +29,8 @@ namespace WK.Tea.DataModel
         public string CityName;
 
         public string AreaName;
-        
+        public Nullable<decimal> OrderFee { get; set; }
+        public Nullable<decimal> ReOrderFee { get; set; }
+
     }
 }

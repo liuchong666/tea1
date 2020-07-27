@@ -33,5 +33,8 @@ namespace WK.Tea.DataModel.SqlModel
         public Nullable<System.DateTime> CTime { get; set; }
 
         public string CleanerOpenID { get; set; }
+
+        public Nullable<decimal> OrderFee { get; set; }
+        public Nullable<decimal> ReOrderFee { get; set; }
     }
 }

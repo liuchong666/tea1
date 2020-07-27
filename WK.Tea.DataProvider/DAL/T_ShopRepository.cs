@@ -78,7 +78,9 @@ namespace WK.Tea.DataProvider.DAL
                                 FloorNo = s.FloorNo,
                                 RoomNo = s.RoomNo,
                                 LAT = s.LAT,
-                                LNG = s.LNG
+                                LNG = s.LNG,
+                                OrderFee = s.OrderFee.Value,
+                                ReOrderFee = s.ReOrderFee.Value
                             };
             
             return query.FirstOrDefault(o=>o.ID == id);

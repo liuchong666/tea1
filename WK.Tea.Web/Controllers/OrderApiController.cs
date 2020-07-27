@@ -150,11 +150,11 @@ namespace WK.Tea.Web.Controllers
                                 order.ReMarks = 1;
                                 order.PayStatus = 0;
                                 order.Flag = 0;
-                                order.FeeCode = 288;
+                                order.FeeCode = shop.OrderFee;
                                 var t = order.Duration - 120;
                                 if (t > 0)
                                 {
-                                    order.FeeCode += t / 30 * 50;
+                                    order.FeeCode += t / 30 * shop.ReOrderFee;
                                 }
                                 order.OpenID = User.Identity.Name;
                                 order.CTime = DateTime.Now;
@@ -722,11 +722,11 @@ namespace WK.Tea.Web.Controllers
                                     order.ReMarks = 1;
                                     order.PayStatus = 0;
                                     order.Flag = 0;
-                                    order.FeeCode = 50;
+                                    order.FeeCode = shop.ReOrderFee;
                                     var t = order.Duration - 30;
                                     if (t > 0)
                                     {
-                                        order.FeeCode += t / 30 * 50;
+                                        order.FeeCode += t / 30 * shop.ReOrderFee;
                                     }
                                     order.OpenID = User.Identity.Name;
                                     order.CTime = DateTime.Now;
