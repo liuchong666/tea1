@@ -1,4 +1,6 @@
 ﻿using Deepleo.Weixin.SDK;
+using Deepleo.Weixin.SDK.Helpers;
+using Deepleo.Weixin.SDK.JSSDK;
 using System.IO;
 using System.Web.Mvc;
 using Tencent;
@@ -94,5 +96,17 @@ namespace WK.Tea.Web.Controllers
             };
         }
 
+        [HttpGet]
+        [ActionName("sign")]
+        public ActionResult Get()
+        {
+            var nonceStr = Util.CreateNonce_str();
+            var timestamp = Util.CreateTimestamp();
+            string str = string.Empty;
+            string uri = Request.RawUrl;
+            var sign=JSAPI.GetSignature(WeixinConfig.JsSdkTicket, nonceStr, timestamp, uri, out str);
+
+            return Json(new { nonceStr ,timestamp,sign,appId= WeixinConfig .AppID});
+        }
     }
 }
