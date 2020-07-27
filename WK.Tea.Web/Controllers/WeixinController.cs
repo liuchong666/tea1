@@ -106,7 +106,7 @@ namespace WK.Tea.Web.Controllers
             string uri = Request.RawUrl;
             var sign=JSAPI.GetSignature(WeixinConfig.JsSdkTicket, nonceStr, timestamp, uri, out str);
 
-            return Json(new { nonceStr ,timestamp,sign,appId= WeixinConfig .AppID});
+            return Json(new { nonceStr ,timestamp,sign,appId= WeixinConfig .AppID}, JsonRequestBehavior.AllowGet);
         }
     }
 }

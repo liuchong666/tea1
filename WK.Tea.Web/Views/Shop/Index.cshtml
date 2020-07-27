@@ -1,15 +1,9 @@
 ﻿<div class="layui-fluid">
     <div class="shop-list">
-
+        <a onclick="getDaohang()">1111111111111</a>
     </div>
 </div>
 
-<script type="text/javascript">
-    define = null;
-    require = null;
-</script>
-
-<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
 <script>
     layui.use(['admin'], function () {
 
@@ -82,12 +76,14 @@
 
             }
         });
-
+        
         admin.req({
             url: '/Weixin/sign'
             , type: 'get'
             //, contentType: "application/json"
             , done: function (res) { //这里要说明一下：done 是只有 response 的 code 正常才会执行。而 succese 则是只要 http 为 200 就会执行
+              
+            }, success: function (res) {
                 wx.config({
                     debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
                     appId: res.appId, // 必填，公众号的唯一标识
@@ -96,21 +92,22 @@
                     signature: res.sign,// 必填，签名
                     jsApiList: ['openLocation', 'getLocation'] // 必填，需要使用的JS接口列表
                 });
-            }, success: function (res) {
             }, complete: function () {
 
             }
         });
 
         wx.ready(function () {
-            alert(1);
+            console.log(1);
         });
 
         wx.error(function (res) {
-            alert(res);
+            alert(1234);
+            console.log(res);
         });
 
         document.getElementsByClassName("daohang").onclick = function () {
+            alert(1);
             wx.openLocation({
                 latitude: 0, // 纬度，浮点数，范围为90 ~ -90
                 longitude: 0, // 经度，浮点数，范围为180 ~ -180。
