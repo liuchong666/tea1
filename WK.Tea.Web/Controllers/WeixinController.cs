@@ -5,6 +5,7 @@ using System.IO;
 using System.Web.Mvc;
 using Tencent;
 using WK.Tea.Web.Common;
+using WK.Tea.Web.Models;
 
 namespace WK.Tea.Web.Controllers
 {
@@ -100,13 +101,14 @@ namespace WK.Tea.Web.Controllers
         [ActionName("sign")]
         public ActionResult Get()
         {
+            ResultMsg resultMsg = new ResultMsg();
             var nonceStr = Util.CreateNonce_str();
             var timestamp = Util.CreateTimestamp();
             string str = string.Empty;
-            string uri = Request.RawUrl;
-            var sign=JSAPI.GetSignature(WeixinConfig.JsSdkTicket, nonceStr, timestamp, uri, out str);
-
-            return Json(new { nonceStr ,timestamp,sign,appId= WeixinConfig .AppID}, JsonRequestBehavior.AllowGet);
+            string uri = "http://dc.orangenet.com.cn/#/shop";
+            var sign = JSAPI.GetSignature(WeixinConfig.JsSdkTicket, nonceStr, timestamp, uri, out str);
+            resultMsg.data = new { nonceStr, timestamp, sign, appId = WeixinConfig.AppID };
+            return Json(resultMsg, JsonRequestBehavior.AllowGet);
         }
     }
 }
