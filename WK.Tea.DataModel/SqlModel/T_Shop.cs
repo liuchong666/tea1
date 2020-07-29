@@ -22,8 +22,8 @@ namespace WK.Tea.DataModel.SqlModel
         public Nullable<int> CityID { get; set; }
         public Nullable<int> AreaID { get; set; }
         public string ShopAddress { get; set; }
-        public string LNG { get; set; }
-        public string LAT { get; set; }
+        public Nullable<decimal> LNG { get; set; }
+        public Nullable<decimal> LAT { get; set; }
         public string ShopPhoneNum { get; set; }
         public string ShopContacts { get; set; }
         public string BuildNo { get; set; }

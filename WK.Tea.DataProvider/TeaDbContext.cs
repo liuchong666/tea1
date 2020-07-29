@@ -122,11 +122,11 @@ namespace WK.Tea.DataProvider
                 new SqlParameter("ShopAddress", shop.ShopAddress) :
                 new SqlParameter("ShopAddress", Convert.DBNull);
 
-            var lNGParameter = shop.LNG != null ?
+            var lNGParameter = shop.LNG.HasValue ?
                 new SqlParameter("LNG", shop.LNG) :
                 new SqlParameter("LNG", Convert.DBNull);
 
-            var lATParameter = shop.LAT != null ?
+            var lATParameter = shop.LAT.HasValue ?
                 new SqlParameter("LAT", shop.LAT) :
                 new SqlParameter("LAT", Convert.DBNull);
 

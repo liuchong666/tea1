@@ -48,7 +48,7 @@
                             } else if (item.Flag == 1) {
                                 return '<div class="shop_info_2"> <img style="width:12px; "  src="/assets/images/shop_icon1.png" />' + item.ShopAddress + '- 已停业</div> ';
                             } else {
-                                return '<div class="shop_info_2 daohang" onclick="getDaohang()"> <img style="width:12px; "  src="/assets/images/shop_icon1.png" />' + item.ShopAddress + '</div> ';
+                                return '<div class="shop_info_2 daohang" onclick="getDaohang(' + item.LAT + ',' + item.LNG + ',\''+ item.ShopName.replace(/\s*/g, "") + '\',\'' + item.ShopAddress.replace(/\s*/g, "") + '\')"> <img style="width:12px; "  src="/assets/images/shop_icon1.png" />' + item.ShopAddress + '</div> ';
                             }
                         }()
                         , '<div >'
@@ -107,12 +107,12 @@
         });
 
     });
-    function getDaohang() {
+    function getDaohang(LAT, LNG, ShopName, ShopAddress) {
         wx.openLocation({
-            latitude: 39.996676, // 纬度，浮点数，范围为90 ~ -90
-            longitude: 116.477051, // 经度，浮点数，范围为180 ~ -180。
-            name: '麒麟社', // 位置名
-            address: '北京市望京麒麟社', // 地址详情说明
+            latitude: LAT, // 纬度，浮点数，范围为90 ~ -90
+            longitude: LNG, // 经度，浮点数，范围为180 ~ -180。
+            name: ShopName, // 位置名
+            address: ShopAddress, // 地址详情说明
             scale: 15, // 地图缩放级别,整形值,范围从1~28。默认为最大
             infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
         });
