@@ -99,13 +99,17 @@ namespace WK.Tea.Web.Controllers
 
         [HttpGet]
         [ActionName("sign")]
-        public ActionResult Get()
+        public ActionResult Get(string uri)
         {
             ResultMsg resultMsg = new ResultMsg();
             var nonceStr = Util.CreateNonce_str();
             var timestamp = Util.CreateTimestamp();
             string str = string.Empty;
-            string uri = "http://dc.orangenet.com.cn/#/shop";
+            if (string.IsNullOrEmpty(uri))
+            {
+                uri = "http://dc.orangenet.com.cn/#/shop";
+            }
+
             var sign = JSAPI.GetSignature(WeixinConfig.JsSdkTicket, nonceStr, timestamp, uri, out str);
             resultMsg.data = new { nonceStr, timestamp, sign, appId = WeixinConfig.AppID };
             return Json(resultMsg, JsonRequestBehavior.AllowGet);
