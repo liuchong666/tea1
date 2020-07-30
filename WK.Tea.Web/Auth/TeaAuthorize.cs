@@ -21,7 +21,7 @@ namespace WK.Tea.Web.Auth
             {
                 if (Roles == "Weixin")
                 {
-                    //filterContext.Result = WeixinOAuth(filterContext);
+                    filterContext.Result = WeixinOAuth(filterContext);
                 }
                 else
                 {
@@ -34,7 +34,7 @@ namespace WK.Tea.Web.Auth
                 var userInfo = user.UserData as DynamicJson;
                 if (Roles == "Weixin" && (!userInfo.IsDefined("Roles") || user.UserData.Roles != Roles))
                 {
-                    //filterContext.Result = WeixinOAuth(filterContext);
+                    filterContext.Result = WeixinOAuth(filterContext);
                 }
                 else
                 {
