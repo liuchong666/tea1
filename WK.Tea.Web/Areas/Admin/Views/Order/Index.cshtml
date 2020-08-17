@@ -216,7 +216,7 @@
 
         var btimeTpl = function (d) {
 
-            return new Date(d.BTime).Format("yyyy/MM/dd HH:mm");
+            return d.BTime;//new Date(d.BTime).Format("yyyy/MM/dd HH:mm");
         }
 
         var payStatusTpl = function (d) {
@@ -231,7 +231,7 @@
 
         var etimeTpl = function (d) {
 
-            return new Date(d.ETime).Format("yyyy/MM/dd HH:mm");
+            return d.ETime;//new Date(d.ETime).Format("yyyy/MM/dd HH:mm");
         }
 
         var durationTpl = function (d) {

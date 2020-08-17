@@ -15,8 +15,32 @@ namespace WK.Tea.DataModel
         public string ShopName { get; set; }
         public string ShopAddress { get; set; }
         public string ShopPhoneNum { get; set; }
-        public System.DateTime BTime { get; set; }
-        public System.DateTime ETime { get; set; }
+
+        private DateTime bTime;
+        public System.DateTime BTime
+        {
+            get
+            {
+                return DateTime.Parse(bTime.ToString("yyyy/MM/dd HH:mm"));
+            }
+            set
+            {
+                bTime = value;
+            }
+        }
+
+        private DateTime eTime;
+        public System.DateTime ETime
+        {
+            get
+            {
+                return DateTime.Parse(eTime.ToString("yyyy/MM/dd HH:mm"));
+            }
+            set
+            {
+                eTime = value;
+            }
+        }
         public int Duration { get; set; }
         public string Ver_Code { get; set; }
         public string OrderNo { get; set; }
