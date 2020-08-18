@@ -256,5 +256,12 @@ namespace WK.Tea.DataProvider
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteStoreQuery<string>(@"C_GetOrderDate");
         }
+
+        public virtual int C_SendSSM(string mobile,string msg)
+        {
+            var mobileParam = new SqlParameter("Mobile", mobile);
+            var msgParam = new SqlParameter("Msg", msg);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteStoreCommand(@"C_OrderSMSNotification @Mobile @Msg", mobileParam, msgParam);
+        }
     }
 }

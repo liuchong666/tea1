@@ -230,6 +230,7 @@ namespace WK.Tea.Web.Controllers
                             string url = "http://dc.orangenet.com.cn/Door/Qrcode?orderId=" + order.ID;
                             WeixinTempMsg.SendOrderPaySuccessMsg(openid, url, shop.ShopAddress, order.BTime, order.ETime, order.FeeCode.Value,order.OrderNo);
                             WeixinTempMsg.SendManagerOrderMsg(url, shop.ShopAddress, order.BTime, order.ETime, order.FeeCode.Value,order.OrderNo);
+                            WeixinTempMsg.SendSMS(shop.ShopAddress, order.Mobile, shop.ShopPhoneNum, order.BTime, order.ETime, url);
                             //WeixinTempMsg.SendCleanMsg(shop.ShopAddress, order.OrderNo, order.BTime, order.ETime);
                         }
                         else

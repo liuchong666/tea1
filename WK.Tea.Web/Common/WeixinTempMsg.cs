@@ -3,6 +3,7 @@ using Deepleo.Weixin.SDK;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Web;
 
@@ -142,6 +143,17 @@ namespace WK.Tea.Web.Common
             var sendResult = TemplateMessageAPI.SendTemplateMessage(WeixinConfig.AccessToken, jsonString.ToString());
 
             LogWriter.Default.WriteError("Send Message, Content:" + jsonString.ToString() + ", Result: " + DynamicJson.Serialize(sendResult) + "|" + sendResult.errmsg);
+        }
+
+        public static void SendSMS(string shopAddress,string mobile,string shopMobile, DateTime orderBeginTime, DateTime orderEndTime,string url)
+        {
+            var msg = "【晓空间】您好您的茶室预订成功!\r\n";
+            msg += "门店地址:"+ shopAddress+"\r\n";
+            msg += "预定手机:"+ mobile + "\r\n";
+            msg+= "客服:" + shopMobile + "\r\n";
+            msg+= "预订时间:" + orderBeginTime.ToString("yyyy/MM/dd HH:mm") + "到"+ orderEndTime.ToString("yyyy/MM/dd HH:mm") + "\r\n";
+            msg += "请于开始时间15分钟前点开下面链接获取开门二维码:\r\n";
+            msg += url;
         }
     }
 }
