@@ -261,7 +261,7 @@ namespace WK.Tea.DataProvider
         {
             var mobileParam = new SqlParameter("Mobile", mobile);
             var msgParam = new SqlParameter("Msg", msg);
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteStoreCommand(@"C_OrderSMSNotification @Mobile @Msg", mobileParam, msgParam);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteStoreCommand(@"C_OrderSMSNotification @Mobile,@Msg", mobileParam, msgParam);
         }
     }
 }

@@ -28,5 +28,7 @@ namespace WK.Tea.DataProvider.IDAL
         List<OrderStatics> GetOrderStatics();
 
         string GetOrderStaticsData();
+
+        int C_SendSSM(string mobile, string msg);
     }
 }

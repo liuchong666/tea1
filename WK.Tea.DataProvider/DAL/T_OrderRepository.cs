@@ -93,6 +93,11 @@ namespace WK.Tea.DataProvider.DAL
             return context.C_GetOrderDate().ToList()[0];
         }
 
+        public int C_SendSSM(string mobile,string msg)
+        {
+            return context.C_SendSSM(mobile,msg);
+        }
+
         public VOrderModel GetVOrderByID(int id)
         {
             var query = from o in context.T_Order
