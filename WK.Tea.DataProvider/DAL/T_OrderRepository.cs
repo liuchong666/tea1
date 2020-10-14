@@ -22,11 +22,11 @@ namespace WK.Tea.DataProvider.DAL
 
             if (order.ID != 0)
             {
-                return context.T_Order.Any(o => o.ID != order.ID && o.ShopID == order.ShopID && (o.BTime <= order.BTime && o.ETime >= order.BTime || o.BTime <= order.ETime && o.ETime >= order.ETime));
+                return context.T_Order.Any(o => o.ID != order.ID && o.ShopID == order.ShopID && (o.BTime <= order.ETime && o.ETime >= order.BTime ));
             }
             else
             {
-                return context.T_Order.Any(o => o.ShopID == order.ShopID && (o.BTime <= order.BTime && o.ETime >= order.BTime || o.BTime <= order.ETime && o.ETime >= order.ETime));
+                return context.T_Order.Any(o => o.ShopID == order.ShopID && (o.BTime <= order.ETime && o.ETime >= order.BTime));
             }
         }
 
