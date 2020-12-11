@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="CreateCardResponse.cs" />
     <Compile Include="CreateCardRequest.cs" />
+    <Compile Include="EEUN\WebApiHelper.cs" />
     <Compile Include="GetCardRequest.cs" />
     <Compile Include="GetCardResponse.cs" />
     <Compile Include="ResultMsg.cs" />
