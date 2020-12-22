@@ -33,5 +33,8 @@ namespace WK.Tea.DataModel.SqlModel
         public byte PayStatus { get; set; }
         public string OP { get; set; }
         public string OpenID { get; set; }
+
+        public string LockPW { get; set; }
+        public string LockURL { get; set; }
     }
 }

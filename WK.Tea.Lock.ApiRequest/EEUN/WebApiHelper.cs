@@ -65,7 +65,7 @@ namespace WK.Tea.Lock.ApiRequest.EEUN
 
         public string GetToken()
         {
-            var token = cache.Get("token").ToString();
+            var token = cache.Get("token")?.ToString();
             if (string.IsNullOrEmpty(token))
             {
                 Dictionary<string, string> sortedParams = new Dictionary<string, string>()

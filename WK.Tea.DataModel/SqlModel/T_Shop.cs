@@ -36,5 +36,8 @@ namespace WK.Tea.DataModel.SqlModel
 
         public Nullable<decimal> OrderFee { get; set; }
         public Nullable<decimal> ReOrderFee { get; set; }
+
+        public Nullable<short> LockType { get; set; }
+        public string LockID { get; set; }
     }
 }
