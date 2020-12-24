@@ -28,7 +28,7 @@ namespace WK.Tea.Web.Controllers
         {
             try
             {
-                T_Order order = null;;
+                T_Order order = null; ;
                 using (IT_Order repository = new T_OrderRepository())
                 {
                     order = repository.Find(id);
@@ -49,7 +49,7 @@ namespace WK.Tea.Web.Controllers
                     var appId = System.Configuration.ConfigurationManager.AppSettings["AppId"];
                     var nonceStr = Util.CreateNonce_str();
                     var timestamp = Util.CreateTimestamp();
-                    var success_redict_url = string.Format("{0}/WxPay/Success?orderNo={1}", domain,order.OrderNo);
+                    var success_redict_url = string.Format("{0}/WxPay/Success?orderNo={1}", domain, order.OrderNo);
                     var url = domain + Request.Url.PathAndQuery;
                     var userAgent = Request.UserAgent;
                     var userVersion = userAgent.Substring(userAgent.LastIndexOf("MicroMessenger/") + 15, 3);//微信版本号高于或者等于5.0才支持微信支付
@@ -185,7 +185,7 @@ namespace WK.Tea.Web.Controllers
                     string time_end = sPara["time_end"];//支付完成时间
                     int total_fee = int.Parse(sPara["total_fee"]); //总金额
                     string bank_type = sPara["bank_type"]; //付款银行
-                    
+
                     var openid = sPara["openid"];
 
                     //****************************************************************************************
@@ -206,20 +206,30 @@ namespace WK.Tea.Web.Controllers
                         }
                         if (shop != null)
                         {
-                            WK.Tea.Lock.ApiRequest.CreateCardRequest postEntity = new WK.Tea.Lock.ApiRequest.CreateCardRequest
+                            string cardNo = string.Empty;
+                            if (shop.LockType != 1)
                             {
-                                communityNo = "1316882760",
-                                roomNo = shop.RoomNo,
-                                floorNo = shop.FloorNo,
-                                buildNo = shop.BuildNo,
-                                startTime = order.BTime.AddMinutes(-15).ToString("yyMMddHHmm"),
-                                endTime = order.ETime.AddMinutes(10).ToString("yyMMddHHmm"),
-                                mobile = string.IsNullOrWhiteSpace(order.Mobile) ? WK.Tea.Lock.ApiRequest.LockApiHelper.Mobile : order.Mobile
-                            };
-                            WK.Tea.Lock.ApiRequest.CreateCardResponse result =
-                                WK.Tea.Lock.ApiRequest.LockApiHelper.WebApi.Post<WK.Tea.Lock.ApiRequest.CreateCardRequest, WK.Tea.Lock.ApiRequest.CreateCardResponse>("https://api.uclbrt.com/?c=Qrcode&a=getLink", postEntity);
+                                WK.Tea.Lock.ApiRequest.CreateCardRequest postEntity = new WK.Tea.Lock.ApiRequest.CreateCardRequest
+                                {
+                                    communityNo = "1316882760",
+                                    roomNo = shop.RoomNo,
+                                    floorNo = shop.FloorNo,
+                                    buildNo = shop.BuildNo,
+                                    startTime = order.BTime.AddMinutes(-15).ToString("yyMMddHHmm"),
+                                    endTime = order.ETime.AddMinutes(10).ToString("yyMMddHHmm"),
+                                    mobile = string.IsNullOrWhiteSpace(order.Mobile) ? WK.Tea.Lock.ApiRequest.LockApiHelper.Mobile : order.Mobile
+                                };
+                                WK.Tea.Lock.ApiRequest.CreateCardResponse result =
+                                    WK.Tea.Lock.ApiRequest.LockApiHelper.WebApi.Post<WK.Tea.Lock.ApiRequest.CreateCardRequest, WK.Tea.Lock.ApiRequest.CreateCardResponse>("https://api.uclbrt.com/?c=Qrcode&a=getLink", postEntity);
+                                
+                                cardNo = result.cardNo;
+                            }
+                            else
+                            {
+                                //todo
+                            }
 
-                            order.CardNo = result.cardNo;
+                            order.CardNo = cardNo;
 
                             using (IT_Order repository = new T_OrderRepository())
                             {
@@ -228,8 +238,8 @@ namespace WK.Tea.Web.Controllers
 
                             //TODO:postData中携带该次支付的用户相关信息，这将便于商家拿到openid，以便后续提供更好的售后服务，譬如：微信公众好通知用户付款成功。如果不提供服务则可以删除此代码
                             string url = "http://dc.orangenet.com.cn/Door/Qrcode?orderId=" + order.ID;
-                            WeixinTempMsg.SendOrderPaySuccessMsg(openid, url, shop.ShopAddress, order.BTime, order.ETime, order.FeeCode.Value,order.OrderNo);
-                            WeixinTempMsg.SendManagerOrderMsg(url, shop.ShopAddress, order.BTime, order.ETime, order.FeeCode.Value,order.OrderNo);
+                            WeixinTempMsg.SendOrderPaySuccessMsg(openid, url, shop.ShopAddress, order.BTime, order.ETime, order.FeeCode.Value, order.OrderNo);
+                            WeixinTempMsg.SendManagerOrderMsg(url, shop.ShopAddress, order.BTime, order.ETime, order.FeeCode.Value, order.OrderNo);
                             WeixinTempMsg.SendSMS(shop.ShopAddress, order.Mobile, shop.ShopPhoneNum, order.BTime, order.ETime, url);
                             //WeixinTempMsg.SendCleanMsg(shop.ShopAddress, order.OrderNo, order.BTime, order.ETime);
                         }
@@ -243,7 +253,7 @@ namespace WK.Tea.Web.Controllers
                         LogWriter.Default.WriteError("Order Error, out_trade_no:" + out_trade_no + ", order is null");
                     }
 
-                    
+
                     LogWriter.Default.WriteError("Notify Success, out_trade_no:" + out_trade_no + ",transaction_id" + transaction_id + ",time_end:" + time_end + ",total_fee:" + total_fee + ",bank_type:" + bank_type + ",openid:" + openid);
                     return Content(string.Format("<xml><return_code><![CDATA[{0}]]></return_code><return_msg><![CDATA[{1}]]></return_msg></xml>", "SUCCESS", "OK"));
                 }

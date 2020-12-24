@@ -60,27 +60,38 @@ namespace WK.Tea.Web.Controllers
                         }
                         if (shop != null)
                         {
-                            WK.Tea.Lock.ApiRequest.CreateCardRequest postEntity = new WK.Tea.Lock.ApiRequest.CreateCardRequest
+                            string cardNo = string.Empty;
+                            if (shop.LockType != 1)
                             {
-                                communityNo = "1316882760",
-                                roomNo = shop.RoomNo,
-                                floorNo = shop.FloorNo,
-                                buildNo = shop.BuildNo,
-                                startTime = order.BTime.AddMinutes(-15).ToString("yyMMddHHmm"),
-                                endTime = order.ETime.AddMinutes(10).ToString("yyMMddHHmm"),
-                                mobile = string.IsNullOrWhiteSpace(order.Mobile) ? WK.Tea.Lock.ApiRequest.LockApiHelper.Mobile : order.Mobile
-                            };
-                            WK.Tea.Lock.ApiRequest.CreateCardResponse result =
-                                WK.Tea.Lock.ApiRequest.LockApiHelper.WebApi.Post<WK.Tea.Lock.ApiRequest.CreateCardRequest, WK.Tea.Lock.ApiRequest.CreateCardResponse>("https://api.uclbrt.com/?c=Qrcode&a=getLink", postEntity);
+                                WK.Tea.Lock.ApiRequest.CreateCardRequest postEntity = new WK.Tea.Lock.ApiRequest.CreateCardRequest
+                                {
+                                    communityNo = "1316882760",
+                                    roomNo = shop.RoomNo,
+                                    floorNo = shop.FloorNo,
+                                    buildNo = shop.BuildNo,
+                                    startTime = order.BTime.AddMinutes(-15).ToString("yyMMddHHmm"),
+                                    endTime = order.ETime.AddMinutes(10).ToString("yyMMddHHmm"),
+                                    mobile = string.IsNullOrWhiteSpace(order.Mobile) ? WK.Tea.Lock.ApiRequest.LockApiHelper.Mobile : order.Mobile
+                                };
+                                WK.Tea.Lock.ApiRequest.CreateCardResponse result =
+                                    WK.Tea.Lock.ApiRequest.LockApiHelper.WebApi.Post<WK.Tea.Lock.ApiRequest.CreateCardRequest, WK.Tea.Lock.ApiRequest.CreateCardResponse>("https://api.uclbrt.com/?c=Qrcode&a=getLink", postEntity);
+
+                                cardNo = result.cardNo;
+                            }
+                            else
+                            {
+                                //todo 自定义密码
+                            }
+
                             using (IT_Order repository = new T_OrderRepository())
                             {
-                                order.CardNo = result.cardNo;
+                                order.CardNo = cardNo;
                                 order.Flag = 0;
                                 order.OP = User.Identity.Name;
                                 order.CTime = DateTime.Now;
                                 repository.Insert(order);
                                 string url = "http://dc.orangenet.com.cn/Door/Qrcode?orderId=" + order.ID;
-                                WeixinTempMsg.SendManagerOrderMsg(url, shop.ShopAddress, order.BTime, order.ETime, order.FeeCode.Value,order.OrderNo);
+                                WeixinTempMsg.SendManagerOrderMsg(url, shop.ShopAddress, order.BTime, order.ETime, order.FeeCode.Value, order.OrderNo);
                                 WeixinTempMsg.SendSMS(shop.ShopAddress, order.Mobile, shop.ShopPhoneNum, order.BTime, order.ETime, url);
                                 //WeixinTempMsg.SendCleanMsg(shop.ShopAddress, order.OrderNo, order.BTime, order.ETime);
                             }
@@ -259,27 +270,38 @@ namespace WK.Tea.Web.Controllers
                             }
                             if (shop != null)
                             {
-                                WK.Tea.Lock.ApiRequest.CreateCardRequest postEntity = new WK.Tea.Lock.ApiRequest.CreateCardRequest
+                                string cardNo = string.Empty;
+                                if (shop.LockType != 1)
                                 {
-                                    communityNo = "1316882760",
-                                    roomNo = shop.RoomNo,
-                                    floorNo = shop.FloorNo,
-                                    buildNo = shop.BuildNo,
-                                    startTime = order.BTime.AddMinutes(-15).ToString("yyMMddHHmm"),
-                                    endTime = order.ETime.AddMinutes(10).ToString("yyMMddHHmm"),
-                                    mobile = string.IsNullOrWhiteSpace(order.Mobile) ? WK.Tea.Lock.ApiRequest.LockApiHelper.Mobile : order.Mobile
-                                };
-                                WK.Tea.Lock.ApiRequest.CreateCardResponse result =
-                                    WK.Tea.Lock.ApiRequest.LockApiHelper.WebApi.Post<WK.Tea.Lock.ApiRequest.CreateCardRequest, WK.Tea.Lock.ApiRequest.CreateCardResponse>("https://api.uclbrt.com/?c=Qrcode&a=getLink", postEntity);
+                                    WK.Tea.Lock.ApiRequest.CreateCardRequest postEntity = new WK.Tea.Lock.ApiRequest.CreateCardRequest
+                                    {
+                                        communityNo = "1316882760",
+                                        roomNo = shop.RoomNo,
+                                        floorNo = shop.FloorNo,
+                                        buildNo = shop.BuildNo,
+                                        startTime = order.BTime.AddMinutes(-15).ToString("yyMMddHHmm"),
+                                        endTime = order.ETime.AddMinutes(10).ToString("yyMMddHHmm"),
+                                        mobile = string.IsNullOrWhiteSpace(order.Mobile) ? WK.Tea.Lock.ApiRequest.LockApiHelper.Mobile : order.Mobile
+                                    };
+                                    WK.Tea.Lock.ApiRequest.CreateCardResponse result =
+                                        WK.Tea.Lock.ApiRequest.LockApiHelper.WebApi.Post<WK.Tea.Lock.ApiRequest.CreateCardRequest, WK.Tea.Lock.ApiRequest.CreateCardResponse>("https://api.uclbrt.com/?c=Qrcode&a=getLink", postEntity);
+
+                                    cardNo = result.cardNo;
+                                }
+                                else
+                                {
+
+                                }
+
                                 using (IT_Order repository = new T_OrderRepository())
                                 {
-                                    order.CardNo = result.cardNo;
+                                    order.CardNo = cardNo;
                                     order.Flag = 0;
                                     order.OP = User.Identity.Name;
                                     order.CTime = DateTime.Now;
                                     repository.Insert(order);
                                     string url = "http://dc.orangenet.com.cn/Door/Qrcode?orderId=" + order.ID;
-                                    WeixinTempMsg.SendManagerOrderMsg(url, shop.ShopAddress, order.BTime, order.ETime, order.FeeCode.Value, order.OrderNo,1);
+                                    WeixinTempMsg.SendManagerOrderMsg(url, shop.ShopAddress, order.BTime, order.ETime, order.FeeCode.Value, order.OrderNo, 1);
                                     WeixinTempMsg.SendCleanMsg(shop.ShopAddress, order.OrderNo, order.BTime, order.ETime, shop.CleanerOpenID, 1);
                                     WeixinTempMsg.SendSMS(shop.ShopAddress, order.Mobile, shop.ShopPhoneNum, order.BTime, order.ETime, url);
                                 }
@@ -362,21 +384,31 @@ namespace WK.Tea.Web.Controllers
                             }
                             if (shop != null)
                             {
-                                WK.Tea.Lock.ApiRequest.CreateCardRequest postEntity = new WK.Tea.Lock.ApiRequest.CreateCardRequest
+                                string cardNo = string.Empty;
+                                if (shop.LockType != 1)
                                 {
-                                    communityNo = "1316882760",
-                                    roomNo = shop.RoomNo,
-                                    floorNo = shop.FloorNo,
-                                    buildNo = shop.BuildNo,
-                                    startTime = order.BTime.AddMinutes(-15).ToString("yyMMddHHmm"),
-                                    endTime = order.ETime.AddMinutes(10).ToString("yyMMddHHmm"),
-                                    mobile = string.IsNullOrWhiteSpace(order.Mobile) ? WK.Tea.Lock.ApiRequest.LockApiHelper.Mobile : order.Mobile
-                                };
-                                WK.Tea.Lock.ApiRequest.CreateCardResponse result =
-                                    WK.Tea.Lock.ApiRequest.LockApiHelper.WebApi.Post<WK.Tea.Lock.ApiRequest.CreateCardRequest, WK.Tea.Lock.ApiRequest.CreateCardResponse>("https://api.uclbrt.com/?c=Qrcode&a=getLink", postEntity);
+                                    WK.Tea.Lock.ApiRequest.CreateCardRequest postEntity = new WK.Tea.Lock.ApiRequest.CreateCardRequest
+                                    {
+                                        communityNo = "1316882760",
+                                        roomNo = shop.RoomNo,
+                                        floorNo = shop.FloorNo,
+                                        buildNo = shop.BuildNo,
+                                        startTime = order.BTime.AddMinutes(-15).ToString("yyMMddHHmm"),
+                                        endTime = order.ETime.AddMinutes(10).ToString("yyMMddHHmm"),
+                                        mobile = string.IsNullOrWhiteSpace(order.Mobile) ? WK.Tea.Lock.ApiRequest.LockApiHelper.Mobile : order.Mobile
+                                    };
+                                    WK.Tea.Lock.ApiRequest.CreateCardResponse result =
+                                        WK.Tea.Lock.ApiRequest.LockApiHelper.WebApi.Post<WK.Tea.Lock.ApiRequest.CreateCardRequest, WK.Tea.Lock.ApiRequest.CreateCardResponse>("https://api.uclbrt.com/?c=Qrcode&a=getLink", postEntity);
+
+                                    cardNo = result.cardNo;
+                                }
+                                else
+                                {
+
+                                }
                                 using (IT_Order repository = new T_OrderRepository())
                                 {
-                                    order.CardNo = result.cardNo;
+                                    order.CardNo = cardNo;
                                     order.Flag = 0;
                                     order.OP = User.Identity.Name;
                                     repository.Insert(order);
@@ -451,21 +483,32 @@ namespace WK.Tea.Web.Controllers
                         }
                         if (shop != null)
                         {
-                            WK.Tea.Lock.ApiRequest.CreateCardRequest postEntity = new WK.Tea.Lock.ApiRequest.CreateCardRequest
+                            string cardNo = string.Empty;
+                            if (shop.LockType != 1)
                             {
-                                communityNo = "1316882760",
-                                roomNo = shop.RoomNo,
-                                floorNo = shop.FloorNo,
-                                buildNo = shop.BuildNo,
-                                startTime = order.BTime.AddMinutes(-15).ToString("yyMMddHHmm"),
-                                endTime = order.ETime.AddMinutes(10).ToString("yyMMddHHmm"),
-                                mobile = string.IsNullOrWhiteSpace(order.Mobile) ? WK.Tea.Lock.ApiRequest.LockApiHelper.Mobile : order.Mobile
-                            };
-                            WK.Tea.Lock.ApiRequest.CreateCardResponse result =
-                                WK.Tea.Lock.ApiRequest.LockApiHelper.WebApi.Post<WK.Tea.Lock.ApiRequest.CreateCardRequest, WK.Tea.Lock.ApiRequest.CreateCardResponse>("https://api.uclbrt.com/?c=Qrcode&a=getLink", postEntity);
+                                WK.Tea.Lock.ApiRequest.CreateCardRequest postEntity = new WK.Tea.Lock.ApiRequest.CreateCardRequest
+                                {
+                                    communityNo = "1316882760",
+                                    roomNo = shop.RoomNo,
+                                    floorNo = shop.FloorNo,
+                                    buildNo = shop.BuildNo,
+                                    startTime = order.BTime.AddMinutes(-15).ToString("yyMMddHHmm"),
+                                    endTime = order.ETime.AddMinutes(10).ToString("yyMMddHHmm"),
+                                    mobile = string.IsNullOrWhiteSpace(order.Mobile) ? WK.Tea.Lock.ApiRequest.LockApiHelper.Mobile : order.Mobile
+                                };
+                                WK.Tea.Lock.ApiRequest.CreateCardResponse result =
+                                    WK.Tea.Lock.ApiRequest.LockApiHelper.WebApi.Post<WK.Tea.Lock.ApiRequest.CreateCardRequest, WK.Tea.Lock.ApiRequest.CreateCardResponse>("https://api.uclbrt.com/?c=Qrcode&a=getLink", postEntity);
+
+                                cardNo = result.cardNo;
+                            }
+                            else
+                            {
+
+                            }
+
                             using (IT_Order repository = new T_OrderRepository())
                             {
-                                order.CardNo = result.cardNo;
+                                order.CardNo = cardNo;
                                 order.OP = null;
                                 repository.Update(order);
                             }
