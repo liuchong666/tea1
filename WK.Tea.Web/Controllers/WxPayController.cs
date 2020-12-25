@@ -12,6 +12,7 @@ using WK.Tea.DataModel;
 using WK.Tea.DataModel.SqlModel;
 using WK.Tea.DataProvider.DAL;
 using WK.Tea.DataProvider.IDAL;
+using WK.Tea.Lock.ApiRequest.EEUN;
 using WK.Tea.Web.Common;
 using WK.Tea.Web.Models;
 
@@ -207,6 +208,7 @@ namespace WK.Tea.Web.Controllers
                         if (shop != null)
                         {
                             string cardNo = string.Empty;
+                            var code = new Random().Next(1000, 9999).ToString();
                             if (shop.LockType != 1)
                             {
                                 WK.Tea.Lock.ApiRequest.CreateCardRequest postEntity = new WK.Tea.Lock.ApiRequest.CreateCardRequest
@@ -226,10 +228,14 @@ namespace WK.Tea.Web.Controllers
                             }
                             else
                             {
-                                //todo
+                                var startTime = order.BTime.AddMinutes(-15).ToString("yyMMddHHmm");
+                                var endTime = order.ETime.AddMinutes(10).ToString("yyMMddHHmm");
+                                
+                                WebApiHelper.CreateInstance().AddLockKey(code, shop.LockID, startTime, endTime);
                             }
 
                             order.CardNo = cardNo;
+                            order.LockPW = code;
 
                             using (IT_Order repository = new T_OrderRepository())
                             {

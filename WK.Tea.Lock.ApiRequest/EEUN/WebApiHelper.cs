@@ -179,5 +179,30 @@ namespace WK.Tea.Lock.ApiRequest.EEUN
             // Return the hexadecimal string.
             return sBuilder.ToString().ToUpper();
         }
+
+        public bool AddLockKey(string code, string lockId, string beginTime, string endTime)
+        {
+            Dictionary<string, string> sortedParams = new Dictionary<string, string>()
+                            {
+                                { "APPID","6005BAFEA0C54011B6602D7A70C36E6C"},
+                                { "AT",WebApiHelper.CreateInstance().GetTimeStamp()},
+                                { "NONCESTR",WebApiHelper.CreateInstance().GetRandom()},
+                                { "USERID","13311237111"},
+                                { "TOKEN",WebApiHelper.CreateInstance().GetToken()},
+                                { "KEYLOCKID",lockId},
+                                { "CARDPSWID",code},
+                                { "ENDDATE",endTime},
+                                { "OPERATETYPE","1"},
+                                { "STARTDATE",beginTime},
+                            };
+
+            var sign = WebApiHelper.CreateInstance().GetSignature(sortedParams);
+            sortedParams.Add("SIGN", sign);
+
+            var result = WebApiHelper.CreateInstance().Get(" https://yylock.eeun.cn/dms/app/addLockKey", sortedParams);
+            var lockKey = JsonConvert.DeserializeObject<LockKeyRespinse>(result).result == 0;
+
+            return lockKey;
+        }
     }
 }
