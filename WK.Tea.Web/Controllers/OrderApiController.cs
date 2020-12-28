@@ -83,8 +83,8 @@ namespace WK.Tea.Web.Controllers
                             else
                             {
                                 //todo 自定义密码
-                                var startTime = order.BTime.AddMinutes(-15).ToString("yyMMddHHmm");
-                                var endTime = order.ETime.AddMinutes(10).ToString("yyMMddHHmm");
+                                var startTime = order.BTime.AddMinutes(-15).ToString("yyyyMMddHHmm");
+                                var endTime = order.ETime.AddMinutes(10).ToString("yyyyMMddHHmm");
                                 
                                 WebApiHelper.CreateInstance().AddLockKey(code, shop.LockID, startTime, endTime);
                             }
