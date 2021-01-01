@@ -65,6 +65,7 @@ namespace WK.Tea.Web.Controllers
                             var qcode = JsonConvert.DeserializeObject<QCodeRespinse>(result).data;
 
                             ViewBag.qcode = "data:image/png;base64,"+qcode;
+                            ViewBag.pwd = order.LockPW;
                             LogWriter.Default.WriteWarning(string.Format("uclbrt lock url: {0}", ViewBag.qcode));
                         }
                         else if (nowTime1 <= order.BTime.AddMinutes(-15))

@@ -6,13 +6,14 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Caching;
 
 namespace WK.Tea.Lock.ApiRequest.EEUN
 {
     public class WebApiHelper
     {
-        private static Cache cache = new Cache();
+        private static Cache cache = HttpRuntime.Cache;
         private static WebApiHelper _LockApiHelper = null;
         private static object Lock = new object();
         public static WebApiHelper WebApi
@@ -65,8 +66,8 @@ namespace WK.Tea.Lock.ApiRequest.EEUN
 
         public string GetToken()
         {
-            var token = cache.Get("token")?.ToString();
-            if (string.IsNullOrEmpty(token))
+            var token = cache["token"] == null?null:cache["token"].ToString();
+            if (token==null)
             {
                 Dictionary<string, string> sortedParams = new Dictionary<string, string>()
                 {
